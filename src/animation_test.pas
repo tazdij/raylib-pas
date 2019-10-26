@@ -2,7 +2,7 @@ program animation_test;
 
 {$MODE objfpc}
 
-uses SysUtils, raylib;
+uses SysUtils, raylib, rlgl;
 
 const
 	screenWidth = 800;
@@ -45,7 +45,6 @@ begin
 
 	while not WindowShouldClose() do
 	begin
-
 		// Test that we are receiving the Struct data back correctly (YES)
 		//mousePos := GetMousePosition();
 		//WriteLn('Mouse Pos: ', FloatToStr(mousePos.x), ', ', FloatToStr(mousePos.y));
