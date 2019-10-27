@@ -85,10 +85,7 @@
 
 unit raylib;
 
-{$MODE DELPHI}
-
-{$Z4}
-{$A8}
+{$MODE ObjFpc}
 
 interface
 
@@ -113,8 +110,6 @@ type
     g: Byte;
     b: Byte;
     a: Byte;
-    constructor Create(aR: Byte; aG: Byte; aB: Byte; aA: Byte);
-    procedure &Set(aR: Byte; aG: Byte; aB: Byte; aA: Byte);
   end;
 
 
@@ -153,8 +148,6 @@ type
   TVector2 = packed record
     x: Single;
     y: Single;
-    constructor Create(aX: Single; aY: Single);
-    procedure &Set(aX: Single; aY: Single);
   end;
 
   // Vector3 type
@@ -163,8 +156,6 @@ type
     x: Single;
     y: Single;
     z: Single;
-    constructor Create(aX: Single; aY: Single; aZ: Single);
-    procedure &Set(aX: Single; aY: Single; aZ: Single);
   end;
 
   // Vector4 type
@@ -208,8 +199,6 @@ type
     y: Single;
     width: Single;
     height: Single;
-    constructor Create(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
-    procedure &Set(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
   end;
 
   // Image type, bpp always RGBA (32bit)
@@ -299,8 +288,6 @@ type
     up : TVector3;
     fovy : Single;
     &type : Integer;
-    constructor Create(aPosition: TVector3; aTarget: TVector3; aUp: TVector3; aFOVY: Single; aType: Integer);
-    procedure &Set(aPosition: TVector3; aTarget: TVector3; aUp: TVector3; aFOVY: Single; aType: Integer);
   end;
 
   PCamera = ^TCamera;
@@ -1388,70 +1375,97 @@ procedure SetAudioStreamVolume(aStream: TAudioStream; aVolume: Single); cdecl; e
 procedure SetAudioStreamPitch(aStream: TAudioStream; aPitch: Single); cdecl; external cDllName;
 
 
+// Custom Misc Functions to help simplify a few things
+function Vector2Create(aX: Single; aY: Single) : TVector2;
+procedure Vector2Set(aVec : PVector2; aX: Single; aY: Single);
+function Vector3Create(aX: Single; aY: Single; aZ: Single) : TVector3;
+procedure Vector3Set(aVec : PVector3; aX: Single; aY: Single; aZ: Single);
+function ColorCreate(aR: Byte; aG: Byte; aB: Byte; aA: Byte) : TColor;
+procedure TColorSet(aColor : PColor; aR: Byte; aG: Byte; aB: Byte; aA: Byte);
+function RectangleCreate(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer) : TRectangle;
+procedure RectangleSet(aRect : PRectangle; aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
+function TCamera3DCreate(aPosition, aTarget, aUp: TVector3; aFOVY: Single; aType: Integer) : TCamera3D;
+procedure TCamera3DSet(aCam : PCamera3D; aPosition, aTarget, aUp: TVector3; aFOVY: Single; aType: Integer);
+
+
 implementation
 
 
-constructor TVector2.Create(aX: Single; aY: Single);
+function Vector2Create(aX: Single; aY: Single) : TVector2;
 begin
-  &Set(aX, aY);
+  Result.x := aX;
+  Result.y := aY;
 end;
 
-procedure TVector2.&Set(aX: Single; aY: Single);
+procedure Vector2Set(aVec : PVector2; aX: Single; aY: Single);
 begin
-  x := aX;
-  y := aY;
+  aVec^.x := aX;
+  aVec^.y := aY;
 end;
 
-constructor TVector3.Create(aX: Single; aY: Single; aZ: Single);
+function Vector3Create(aX: Single; aY: Single; aZ: Single) : TVector3;
 begin
-  &Set(aX, aY, aZ);
+  Result.x := aX;
+  Result.y := aY;
+  Result.z := aZ;
 end;
 
-procedure TVector3.&Set(aX: Single; aY: Single; aZ: Single);
+procedure Vector3Set(aVec : PVector3; aX: Single; aY: Single; aZ: Single);
 begin
-  x := aX;
-  y := aY;
-  z := aZ;
+  aVec^.x := aX;
+  aVec^.y := aY;
+  aVec^.z := aZ;
 end;
 
-constructor TColor.Create(aR: Byte; aG: Byte; aB: Byte; aA: Byte);
+function ColorCreate(aR: Byte; aG: Byte; aB: Byte; aA: Byte) : TColor;
 begin
-  &Set(aR, aG, aB, aA);
+  Result.r := aR;
+  Result.g := aG;
+  Result.b := aB;
+  Result.a := aA;
 end;
 
-procedure TColor.&Set(aR: Byte; aG: Byte; aB: Byte; aA: Byte);
+procedure TColorSet(aColor : PColor; aR: Byte; aG: Byte; aB: Byte; aA: Byte);
 begin
-  r := aR;
-  g := aG;
-  b := aB;
-  a := aA;
+  aColor^.r := aR;
+  aColor^.g := aG;
+  aColor^.b := aB;
+  aColor^.a := aA;
 end;
 
-constructor TRectangle.Create(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
+
+function RectangleCreate(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer) : TRectangle;
 begin
-  &Set(aX, aY, aWidth, aHeight);
+  Result.x := aX;
+  Result.y := aY;
+  Result.width := aWidth;
+  Result.height := aHeight;
 end;
 
-procedure TRectangle.&Set(aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
+procedure RectangleSet(aRect : PRectangle; aX: Integer; aY: Integer; aWidth: Integer; aHeight: Integer);
 begin
-  x := aX;
-  y := aY;
-  width := aWidth;
-  height := aHeight;
+  aRect^.x := aX;
+  aRect^.y := aY;
+  aRect^.width := aWidth;
+  aRect^.height := aHeight;
 end;
 
-constructor TCamera3D.Create(aPosition: TVector3; aTarget: TVector3; aUp: TVector3; aFOVY: Single; aType: Integer);
+function TCamera3DCreate(aPosition, aTarget, aUp: TVector3; aFOVY: Single; aType: Integer) : TCamera3D;
 begin
-  &Set(aPosition, aTarget, aUp, aFOVY, aType);
+  Result.position := aPosition;
+  Result.target := aTarget;
+  Result.up := aUp;
+  Result.fovy := aFOVY;
+  Result.&type := aType;
 end;
 
-procedure TCamera3D.&Set(aPosition: TVector3; aTarget: TVector3; aUp: TVector3; aFOVY: Single; aType: Integer);
+procedure TCamera3DSet(aCam : PCamera3D; aPosition, aTarget, aUp: TVector3; aFOVY: Single; aType: Integer);
 begin
-  position := aPosition;
-  target := aTarget;
-  up := aUp;
-  fovy := aFOVY;
-  &type := aType;
+  aCam^.position := aPosition;
+  aCam^.target := aTarget;
+  aCam^.up := aUp;
+  aCam^.fovy := aFOVY;
+  aCam^.&type := aType;
 end;
 
 

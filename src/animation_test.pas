@@ -20,9 +20,9 @@ begin
 
 	InitWindow(screenWidth, screenHeight, 'Animation Test');	
 
-	cam.position := TVector3.Create(10.0, 10.0, 10.0);
+	cam.position := Vector3Create(15.0, 15.0, 15.0);
 	cam.target := Vector3Zero();
-	cam.up := TVector3.Create(0.0, 1.0, 0.0);
+	cam.up := Vector3Create(0.0, 1.0, 0.0);
 	cam.fovy := 45.0;
 	cam.&type := CAMERA_PERSPECTIVE;
 
@@ -63,7 +63,7 @@ begin
 			ClearBackground(RAYWHITE);
 			BeginMode3d(cam);
 		
-				DrawModelEx(model, position, TVector3.Create(1.0, 0.0, 0.0), -90.0, TVector3.Create(1.0, 1.0, 1.0), WHITE);
+				DrawModelEx(model, position, Vector3Create(1.0, 0.0, 0.0), -90.0, Vector3Create(1.0, 1.0, 1.0), WHITE);
 				for i := 0 to model.boneCount - 1 do
 				begin
 				  DrawCube(anims[0].framePoses[animFrameCounter][i].translation, 0.2, 0.2, 0.2, RED);
