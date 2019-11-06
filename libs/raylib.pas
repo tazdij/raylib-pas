@@ -90,7 +90,7 @@ unit raylib;
 interface
 
 const
-  cDllName = 'raylib.dll';
+  cDllName = {$IFDEF WINDOWS} 'raylib.dll' {$IFEND} {$IFDEF DARWIN} 'libraylib.dylib' {$IFEND} {$IFDEF LINUX} 'libraylib.so' {$IFEND};
 
   // Some basic Defines
   DEG2RAD = (PI/180.0);
