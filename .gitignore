@@ -12,3 +12,6 @@ tmp/*.a
 # laz
 backup/
 lib/
+
+# GNU+Linux
+*.so
