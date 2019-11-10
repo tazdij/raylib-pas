@@ -150,14 +150,14 @@ begin
                     // TODO: Draw generic gamepad
    	    end;
 
-                DrawText(PChar(Format('DETECTED AXIS [%i]:', [GetGamepadAxisCount(GAMEPAD_PLAYER1)] )), 10, 50, 10, MAROON);
+                DrawText(PChar(Format('DETECTED AXIS [%d]:', [GetGamepadAxisCount(GAMEPAD_PLAYER1)] )), 10, 50, 10, MAROON);
 
                 for i := 0 to GetGamepadAxisCount(GAMEPAD_PLAYER1) -1 do
                 begin
                     DrawText(PChar(Format('AXIS %d: %.02f', [ i, GetGamepadAxisMovement(GAMEPAD_PLAYER1, i)])), 20, 70 + 20*i, 10, DARKGRAY);
                 end;
 
-                if (GetGamepadButtonPressed() <> -1) then DrawText(PChar(Format('DETECTED BUTTON: %i', [ GetGamepadButtonPressed()] )), 10, 430, 10, RED)
+                if (GetGamepadButtonPressed() <> -1) then DrawText(PChar(Format('DETECTED BUTTON: %d', [ GetGamepadButtonPressed()] )), 10, 430, 10, RED)
                 else DrawText('DETECTED BUTTON: NONE', 10, 430, 10, GRAY);
             end
             else
