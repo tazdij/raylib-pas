@@ -2,3 +2,12 @@
 tmp/*.o
 tmp/*.ppu
 tmp/*.a
+
+# bin
+
+# macos
+.DS_Store
+
+# laz
+backup/
+lib/
