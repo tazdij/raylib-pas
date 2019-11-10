@@ -1,4 +1,4 @@
-program core_basic_window;
+program core_input_keys;
 
 {$MODE objfpc}
 
@@ -16,7 +16,7 @@ begin
   SetExceptionMask([exDenormalized,exInvalidOp,exOverflow,exPrecision,exUnderflow,exZeroDivide]);
   {$IFEND}
 
-  InitWindow(screenWidth, screenHeight, 'raylib [core] example - basic window');
+  InitWindow(screenWidth, screenHeight, 'raylib [core] example - input keys');
 
   ballPosition := Vector2Create(screenWidth / 2, screenHeight / 2);
 
