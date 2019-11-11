@@ -3,7 +3,7 @@ tmp/*.o
 tmp/*.ppu
 tmp/*.a
 
-# bin
+bin/
 
 # macos
 .DS_Store
@@ -12,6 +12,7 @@ tmp/*.a
 # laz
 backup/
 lib/
+*.lps
 
 # GNU+Linux
 *.so
