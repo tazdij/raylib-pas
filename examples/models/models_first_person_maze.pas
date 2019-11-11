@@ -42,8 +42,8 @@ begin
 
   // NOTE: By default each cube is mapped to one part of texture atlas
   texture := LoadTexture('res/textures/cubicmap_atlas.png');    // Load map texture
-  model.materials[0].maps[MAP_DIFFUSE].texture := texture;             // Set map diffuse texture
-  //SetMaterialTexture(@model.materials[0], MAP_DIFFUSE, texture);
+  //model.materials[0].maps[MAP_DIFFUSE].texture := texture;             // Set map diffuse texture
+  SetMaterialTexture(@model.materials[0], MAP_DIFFUSE, texture);
 
   // Get map image data to be used for collision detection
   mapPixels := GetImageData(imMap);

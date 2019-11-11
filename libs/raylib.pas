@@ -86,6 +86,7 @@
 unit raylib;
 
 {$MODE ObjFpc}
+{$PACKRECORDS C}
 
 interface
 
@@ -371,7 +372,7 @@ type
 
   // Model type
   PModel = ^TModel;
-  TModel = packed record
+  TModel = record
     transform: TMatrix;
 
     meshCount : Integer;
