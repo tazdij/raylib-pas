@@ -27,7 +27,7 @@
     </RunParams>
     <Units Count="4">
       <Unit0>
-        <Filename Value="../../libs/rlgl.pas"/>
+        <Filename Value="../models/models_first_person_maze.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
@@ -39,7 +39,7 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="../models/models_first_person_maze.pas"/>
+        <Filename Value="../../libs/rlgl.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
     </Units>
