@@ -1,4 +1,4 @@
-# raylib-pas A Pascal Binding for Raylib 2.5.0
+# raylib-pas A Pascal Binding for Raylib 2.6.0-dev (master)
 
 raylib-pas is a header translation of the Raylib Game Development Library. It is intended for use with a Shared Library (`raylib.dll`, `libraylib.so`, `libraylib.dylib`) From a FreePascal Project.
 
@@ -10,7 +10,7 @@ We assume you linked or copied the `raylib` shared library for your platform int
 
 #### GNU+Linux
 
-- [Download prebuilt binary release for your distro](https://github.com/raysan5/raylib/releases) 
+- [Download prebuilt binary release for your distro](https://github.com/raysan5/raylib/releases)
 
 ```sh
 wget https://github.com/raysan5/raylib/releases/download/2.5.0/raylib-2.5.0-Linux-amd64.tar.gz
@@ -41,8 +41,7 @@ Thanks to drezgames/raylib-pascal for the examples. Ported by raylib-pas from de
 
 ## TODO
 
-- Eventually I will be doing some work to compile the project with static linking. Hopefully this will allow for more cross-platform compilation of raylib-pas. Mainly for Android and eventually iOS when raylib supports that.
-
+- Eventually we will be doing some work to compile the project with static linking. Hopefully this will allow for more cross-platform compilation of raylib-pas. Mainly for Android and eventually iOS when raylib supports that.
 - Add Android and WebAssembly support.
-
 - Port/Create more examples and games.
+- Include Binary Distribution of "Supported" Raylib Shared Libraries with this binding.
