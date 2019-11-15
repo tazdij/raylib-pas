@@ -34,12 +34,13 @@ begin
     buildings[i].height := GetRandomValue(100, 800);
     buildings[i].y := screenHeight - 130 - buildings[i].height;
     buildings[i].x := -6000 + spacing;
+
     spacing := spacing + buildings[i].width;
     buildColors[i] := ColorCreate(GetRandomValue(200, 240), GetRandomValue(200, 240), GetRandomValue(200, 250), 255);
   end;
 
   camera.target := Vector2Create(player.x + 20, player.y + 20);
-  camera.offset := Vector2Create(0, 0);
+  camera.offset := Vector2Create(screenWidth / 2.0, screenHeight / 2.0);
   camera.rotation := 0.0;
   camera.zoom := 1.0;
 
@@ -48,15 +49,9 @@ begin
   while not WindowShouldClose do
   begin
     if IsKeyDown(KEY_RIGHT) then
-      begin
-        player.x := player.x + 2;
-        camera.offset.x := camera.offset.x - 2;
-      end
+      player.x := player.x + 2
     else if IsKeyDown(KEY_LEFT) then
-      begin
-        player.x := player.x - 2;
-        camera.offset.x := camera.offset.x + 2;
-      end;
+      player.x := player.x - 2;
 
     camera.target := Vector2Create(player.x + 20, player.y + 20);
 
