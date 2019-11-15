@@ -4,8 +4,17 @@ BIN=./bin
 TMP=./tmp
 RAYLIB=$BIN
 
+STATIC=true
+
 fpc -Fl$RAYLIB -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP ./src/animation_test.pas
 for pasfile in ./examples/**/*.pas
 do
-  fpc -Fl$RAYLIB -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  if [ $STATIC = true ]
+  then
+    # https://github.com/glfw/glfw/issues/1517
+    # $BIN must contain libglfw3.a and libraylib.a
+    fpc -k-lpthread -k-lm -k-lz -k-lGL -k-lX11 -k-lXext -k-lXfixes -k-ldl -Fu$BIN -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  else
+    fpc -Fl$RAYLIB -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  fi
 done
