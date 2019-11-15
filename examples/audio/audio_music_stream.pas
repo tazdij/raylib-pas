@@ -42,7 +42,7 @@ begin
       ClearBackground(RAYWHITE);
       DrawText('MUSIC SHOULD BE PLAYING!', 255, 150, 20, LIGHTGRAY);
       DrawRectangle(200, 200, 400, 12, LIGHTGRAY);
-      DrawRectangle(200, 200, Round(timePlayed), 12, MAROON);
+      DrawRectangle(200, 200, Trunc(timePlayed), 12, MAROON);
       DrawRectangleLines(200, 200, 400, 12, GRAY);
       DrawText('PRESS SPACE TO RESTART MUSIC', 215, 250, 20, LIGHTGRAY);
       DrawText('PRESS P TO PAUSE/RESUME MUSIC', 208, 280, 20, LIGHTGRAY);

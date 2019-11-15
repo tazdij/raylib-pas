@@ -87,9 +87,9 @@ begin
         begin
           if mouseTail[i].active then
             DrawTexturePro(smoke, RectangleCreate(0, 0, smoke.width, smoke.height),
-              RectangleCreate(Round(mouseTail[i].position.x),
-              Round(mouseTail[i].position.y), Round(smoke.width * mouseTail[i].size),
-              Round(smoke.height * mouseTail[i].size)),
+              RectangleCreate(Trunc(mouseTail[i].position.x),
+              Trunc(mouseTail[i].position.y), Trunc(smoke.width * mouseTail[i].size),
+              Trunc(smoke.height * mouseTail[i].size)),
               Vector2Create(smoke.width * mouseTail[i].size / 2,
               smoke.height * mouseTail[i].size / 2), mouseTail[i].rotation,
               Fade(mouseTail[i].color, mouseTail[i].alpha));
