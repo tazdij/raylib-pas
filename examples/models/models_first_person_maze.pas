@@ -7,6 +7,7 @@ uses cmem, raylib, raymath, math;
 const
   screenWidth = 800;
   screenHeight = 450;
+
 var
   camera: TCamera;
   imMap: TImage;
@@ -27,8 +28,7 @@ begin
   InitWindow(screenWidth, screenHeight, 'raylib [models] example - first person maze');
 
   // Define the camera to look into our 3d world
-  //camera = { { 0.2f, 0.4f, 0.2f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
-  //camera := TCamera3DCreate( Vector3Create(0.2, 0.4, 0.2), Vector3Zero(), Vector3Create(0.0, 1.0, 0.0), 45.0, CAMERA_PERSPECTIVE);
+  // camera := TCamera3DCreate( Vector3Create(0.2, 0.4, 0.2), Vector3Zero(), Vector3Create(0.0, 1.0, 0.0), 45.0, CAMERA_PERSPECTIVE);
   camera.position := Vector3Create(0.2, 0.4, 0.2);
   camera.target := Vector3Zero();
   camera.up := Vector3Create(0.0, 1.0, 0.0);
@@ -41,9 +41,8 @@ begin
   model := LoadModelFromMesh(mesh);
 
   // NOTE: By default each cube is mapped to one part of texture atlas
-  texture := LoadTexture('res/textures/cubicmap_atlas.png');    // Load map texture
-  model.materials[0].maps[MAP_DIFFUSE].texture := texture;             // Set map diffuse texture
-  //SetMaterialTexture(@model.materials[0], MAP_DIFFUSE, texture);
+  texture := LoadTexture('res/textures/cubicmap_atlas.png');          // Load map texture
+  SetMaterialTexture(@model.materials[0], MAP_DIFFUSE, texture);      // Set map diffuse texture
 
   // Get map image data to be used for collision detection
   mapPixels := GetImageData(imMap);
