@@ -69,8 +69,8 @@ begin
       playerPos :=  Vector2Create(camera.position.x, camera.position.z );
       playerRadius := 0.1;  // Collision radius (player is modelled as a cilinder for collision)
 
-      playerCellX := Round(playerPos.x - mapPosition.x + 0.5);
-      playerCellY := Round(playerPos.y - mapPosition.z + 0.5);
+      playerCellX := Trunc(playerPos.x - mapPosition.x + 0.5);
+      playerCellY := Trunc(playerPos.y - mapPosition.z + 0.5);
 
       // Out-of-limits security check
       if (playerCellX < 0) then playerCellX := 0
@@ -87,7 +87,7 @@ begin
           begin
               if ((mapPixels[y*cubicmap.width + x].r = 255) and       // Collision: white pixel, only check R channel
                   (CheckCollisionCircleRec(playerPos, playerRadius,
-                  RectangleCreate(Round(mapPosition.x - 0.5 + x*1.0), Round(mapPosition.z - 0.5 + y*1.0), 1, 1 )))) then
+                  RectangleCreate(Trunc(mapPosition.x - 0.5 + x*1.0), Trunc(mapPosition.z - 0.5 + y*1.0), 1, 1 )))) then
               begin
                   // Collision detected, reset camera position
                   camera.position := oldCamPos;

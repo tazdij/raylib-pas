@@ -80,20 +80,20 @@ begin
                     // Draw axis: left joystick
                     DrawCircle(259, 152, 39, BLACK);
                     DrawCircle(259, 152, 34, LIGHTGRAY);
-                    DrawCircle(Round(259 + (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_X)*20)),
-                               Round(152 - (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_Y)*20)), 25, BLACK);
+                    DrawCircle(Trunc(259 + (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_X)*20)),
+                               Trunc(152 - (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_Y)*20)), 25, BLACK);
 
                     // Draw axis: right joystick
                     DrawCircle(461, 237, 38, BLACK);
                     DrawCircle(461, 237, 33, LIGHTGRAY);
-                    DrawCircle(Round(461 + (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_X)*20)),
-                               Round(237 - (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_Y)*20)), 25, BLACK);
+                    DrawCircle(Trunc(461 + (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_X)*20)),
+                               Trunc(237 - (GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_Y)*20)), 25, BLACK);
 
                     // Draw axis: left-right triggers
                     DrawRectangle(170, 30, 15, 70, GRAY);
                     DrawRectangle(604, 30, 15, 70, GRAY);
-                    DrawRectangle(170, 30, 15, Round(((1.0 + GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_TRIGGER)) /2.0)*70), RED);
-                    DrawRectangle(604, 30, 15, Round(((1.0 + GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_TRIGGER)) /2.0)*70), RED);
+                    DrawRectangle(170, 30, 15, Trunc(((1.0 + GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_TRIGGER)) /2.0)*70), RED);
+                    DrawRectangle(604, 30, 15, Trunc(((1.0 + GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_TRIGGER)) /2.0)*70), RED);
 
                     //DrawText(Format('Xbox axis LT: %02.02f', [ GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_TRIGGER) ]) , 10, 40, 10, BLACK);
                     //DrawText(Format('Xbox axis RT: %02.02f', [ GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_TRIGGER) ]) , 10, 60, 10, BLACK);
@@ -128,20 +128,20 @@ begin
                     // Draw axis: left joystick
                     DrawCircle(319, 255, 35, BLACK);
                     DrawCircle(319, 255, 31, LIGHTGRAY);
-                    DrawCircle(319 + Round(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_X)*20),
-                               255 + Round(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_Y)*20), 25, BLACK);
+                    DrawCircle(319 + Trunc(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_X)*20),
+                               255 + Trunc(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_Y)*20), 25, BLACK);
 
                     // Draw axis: right joystick
                     DrawCircle(475, 255, 35, BLACK);
                     DrawCircle(475, 255, 31, LIGHTGRAY);
-                    DrawCircle(475 + Round(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_X)*20),
-                               255 + Round(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_Y)*20), 25, BLACK);
+                    DrawCircle(475 + Trunc(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_X)*20),
+                               255 + Trunc(GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_Y)*20), 25, BLACK);
 
                     // Draw axis: left-right triggers
                     DrawRectangle(169, 48, 15, 70, GRAY);
                     DrawRectangle(611, 48, 15, 70, GRAY);
-                    DrawRectangle(169, 48, 15, Round(((1.0 - GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_TRIGGER)) /2.0)*70), RED);
-                    DrawRectangle(611, 48, 15, Round(((1.0 - GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_TRIGGER)) /2.0)*70), RED);
+                    DrawRectangle(169, 48, 15, Trunc(((1.0 - GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_LEFT_TRIGGER)) /2.0)*70), RED);
+                    DrawRectangle(611, 48, 15, Trunc(((1.0 - GetGamepadAxisMovement(GAMEPAD_PLAYER1, GAMEPAD_AXIS_RIGHT_TRIGGER)) /2.0)*70), RED);
                 end
                 else
                 begin
