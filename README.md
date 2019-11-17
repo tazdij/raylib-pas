@@ -1,43 +1,56 @@
 # raylib-pas A Pascal Binding for Raylib 2.6.0-dev (master)
 
-raylib-pas is a header translation of the Raylib Game Development Library. It is intended for use with a Shared Library (`raylib.dll`, `libraylib.so`, `libraylib.dylib`) From a FreePascal Project.
+raylib-pas is a header translation of the [Raylib Game Development Library](https://www.raylib.com/) for the [FreePascal Project](https://www.freepascal.org/).
 
-## Cross Platform (`make`)
+## Build
 
-You can execute `make` on Windows, GNU+Linux and macOS.
+You can execute `make` on GNU+Linux, macOS and Windows.
 
-We assume you linked or copied the `raylib` shared library for your platform into `./bin` eg.
+### Shared or Static Library
+
+You will need to source [raylib](https://github.com/raysan5/raylib/) for your platform.
+
+- [Working on GNU Linux](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux)
+- [Working on macOS](https://github.com/raysan5/raylib/wiki/Working-on-macOS)
+- [Working on Windows](https://github.com/raysan5/raylib/wiki/Working-on-Windows)
+
+We assume you linked or copied the `raylib` shared(`*.so,*.dylib,*.dll`) or static(`*.a`) library for your platform into `./bin`.
+
+If you want to use the static library use `make` as follow:
+
+```sh
+make RAYLIB_LIBTYPE=STATIC
+```
+
+Or to build binaries you can debug:
+
+```sh
+make DEBUG=TRUE
+```
 
 #### GNU+Linux
 
-- [Download prebuilt binary release for your distro](https://github.com/raysan5/raylib/releases)
+If you use the shared library you must specify where to source the `libraylib.so` file.
 
-```sh
-wget https://github.com/raysan5/raylib/releases/download/2.5.0/raylib-2.5.0-Linux-amd64.tar.gz
-tar -xvf raylib-2.5.0-Linux-amd64.tar.gz raylib-2.5.0-Linux-amd64/lib/*.so ./bin/`
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. # adjust the export to search for the .so in the local path
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. # adjust the export to search for the .so in the local path
 ```
 
-#### macOS
-
-- Note you can also source the latest binary release from github as in the GNU+Linux step, or use the Homebrew package:
-
-```sh
-brew install raylib
-ln -s /usr/local/Cellar/raylib/2.5.0/lib/libraylib.dylib ./bin/libraylib.dylib
-```
+If you want to link to the static library you must copy `libglfw3.a` and `libraylib.a` into `./bin`.
 
 #### Windows
 
-- Currently tested with a 32bit raylib.dll file compiled with the MinGW GCC 8.1.0 32Bit.
-- [Download prebuilt binary release for your Windows (eg `Win<64/32>-<mingw/msvc15>.zip`)](https://github.com/raysan5/raylib/releases)
-- Copy the dll to `./bin`.
+To use `make` it must be in your `%PATH%`. `fpc` includes `make.exe` in the bin directory.
+
+```sh
+set PATH=%PATH%;C:\fpc\3.0.4\bin\x86_64-win64
+```
 
 ## Examples
 
 Try some of the ported c to fpc examples in `examples/core`, `examples/models`, `examples/audio` etc.
 
-Thanks to drezgames/raylib-pascal for the examples. Ported by raylib-pas from delphi to fpc.
+Thanks to drezgames/raylib-pascal for the examples. Originally delphi, now fpc.
 
 ## TODO
 
