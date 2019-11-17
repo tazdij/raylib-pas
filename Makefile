@@ -27,6 +27,6 @@ clean:
 Windows:
 	build.bat $(BFLAGS)
 Darwin:
-	sh build.macos.sh $(BFLAGS)
+	./build.macos.sh $(BFLAGS)
 Linux:
-	sh build.linux.sh $(BFLAGS)
+	bash ./build.linux.sh $(BFLAGS)

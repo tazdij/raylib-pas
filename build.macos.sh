@@ -13,7 +13,7 @@ fi
 DEBUG=
 if [[ $@ == *'--debug'* ]]
 then
-  DEBUG="-g -o1"
+  DEBUG="-g -O1"
 fi
 
 for pasfile in ./examples/**/*.pas
