@@ -25,7 +25,7 @@ default: $(TARGET_OS) ;
 clean:
 	rm tmp/*.o tmp/*.ppu
 Windows:
-	build.bat
+	build.bat $(BFLAGS)
 Darwin:
 	sh build.macos.sh $(BFLAGS)
 Linux:
