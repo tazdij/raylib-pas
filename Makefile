@@ -1,6 +1,7 @@
 .PHONY: default clean Windows Darwin Linux
 
 RAYLIB_LIBTYPE ?= SHARED
+DEBUG ?= FALSE
 
 ifeq ($(OS),Windows_NT)
 	TARGET_OS := Windows
@@ -13,6 +14,10 @@ ifeq ($(RAYLIB_LIBTYPE),STATIC)
 endif
 ifeq ($(RAYLIB_LIBTYPE),SHARED)
 	BFLAGS = ""
+endif
+
+ifeq ($(DEBUG),TRUE)
+	BFLAGS += "--debug"
 endif
 
 default: $(TARGET_OS) ;
