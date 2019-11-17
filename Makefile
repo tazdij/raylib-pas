@@ -1,3 +1,5 @@
+.PHONY: default clean Windows Darwin Linux
+
 RAYLIB_LIBTYPE ?= SHARED
 
 ifeq ($(OS),Windows_NT)
@@ -13,7 +15,6 @@ ifeq ($(RAYLIB_LIBTYPE),SHARED)
 	BFLAGS = ""
 endif
 
-.PHONY: default
 default: $(TARGET_OS) ;
 
 clean:
