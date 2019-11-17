@@ -2,9 +2,9 @@
 
 raylib-pas is a header translation of the [Raylib Game Development Library](https://www.raylib.com/) for the [FreePascal Project](https://www.freepascal.org/).
 
-## Cross Platform (`make`)
+## Build
 
-You can execute `make` on GNU+Linux, macOS and Windows(TODO).
+You can execute `make` on GNU+Linux, macOS and Windows.
 
 ### Shared or Static Library
 
@@ -22,6 +22,12 @@ If you want to use the static library use `make` as follow:
 make RAYLIB_LIBTYPE=STATIC
 ```
 
+Or to build binaries you can debug:
+
+```sh
+make DEBUG=TRUE
+```
+
 #### GNU+Linux
 
 If you use the shared library you must specify where to source the `libraylib.so` file.
@@ -31,6 +37,14 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. # adjust the export to search for the 
 ```
 
 If you want to link to the static library you must copy `libglfw3.a` and `libraylib.a` into `./bin`.
+
+#### Windows
+
+To use `make` it must be in your `%PATH%`. `fpc` includes `make.exe` in the bin directory.
+
+```sh
+set PATH=%PATH%;C:\fpc\3.0.4\bin\x86_64-win64
+```
 
 ## Examples
 
