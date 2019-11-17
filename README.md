@@ -1,6 +1,6 @@
 # raylib-pas A Pascal Binding for Raylib 2.6.0-dev (master)
 
-raylib-pas is a header translation of the Raylib Game Development Library for the FreePascal Project.
+raylib-pas is a header translation of the [Raylib Game Development Library](https://www.raylib.com/) for the [FreePascal Project](https://www.freepascal.org/).
 
 ## Cross Platform (`make`)
 
@@ -22,13 +22,15 @@ If you want to use the static library use `make` as follow:
 make RAYLIB_LIBTYPE=STATIC
 ```
 
-### GNU+Linux
+#### GNU+Linux
 
 If you use the shared library you must specify where to source the `libraylib.so` file.
 
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. # adjust the export to search for the .so in the local path
 ```
+
+If you want to link to the static library you must copy `libglfw3.a` and `libraylib.a` into `./bin`.
 
 ## Examples
 
