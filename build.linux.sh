@@ -3,20 +3,25 @@ LIBS=./libs
 BIN=./bin
 TMP=./tmp
 RAYLIB=$BIN
+PASFILES=./examples/**/*.pas
+STATIC=false
+DEBUG=
 
-STATIC=false # SHARED by default
+if test -f "$1"; then
+    PASFILES=$1
+fi
+
 if [[ $@ == *'--static'* ]]
 then
   STATIC=true
 fi
 
-DEBUG=
 if [[ $@ == *'--debug'* ]]
 then
   DEBUG="-g -O1"
 fi
 
-for pasfile in ./examples/**/*.pas
+for pasfile in $PASFILES
 do
   if [ $STATIC = true ]
   then
