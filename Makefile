@@ -1,23 +1,26 @@
+RAYLIB_LIBTYPE ?= SHARED
+
 ifeq ($(OS),Windows_NT)
 	TARGET_OS := Windows
 else
 	TARGET_OS := $(shell uname -s)	
 endif
 
-all: $(TARGET_OS)
+ifeq ($(RAYLIB_LIBTYPE),STATIC)
+	BFLAGS = "--static"
+endif
+ifeq ($(RAYLIB_LIBTYPE),SHARED)
+	BFLAGS = ""
+endif
 
-clean: $(TARGET_OS)_clean
+.PHONY: default
+default: $(TARGET_OS) ;
 
+clean:
+	rm tmp/*.o tmp/*.ppu
 Windows:
 	build.bat
 Darwin:
-	sh build.macos.sh
+	sh build.macos.sh $(BFLAGS)
 Linux:
-	sh build.linux.sh
-
-Windows_clean:
-	clean.bat
-Darwin_clean:
-	sh clean.macos.sh
-Linux_clean:
-	sh clean.linux.sh
+	sh build.linux.sh $(BFLAGS)

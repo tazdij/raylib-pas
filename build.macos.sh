@@ -4,8 +4,19 @@ BIN=./bin
 TMP=./tmp
 RAYLIB=$BIN/libraylib.dylib
 
-fpc -k"$RAYLIB" -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP ./src/animation_test.pas
+STATIC=false
+if [[ $@ == *'--static'* ]]
+then
+  echo "building using static .a"
+  STATIC=true
+fi
+
 for pasfile in ./examples/**/*.pas
 do
-  fpc -k"$RAYLIB" -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  if [ $STATIC = true ]
+  then
+fpc -k"-framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL  `pwd`/bin/libraylib.a" -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  else
+    fpc -k"$RAYLIB" -Fl$LIBS -Fu$LIBS -FE$BIN -FU$TMP $pasfile
+  fi
 done
