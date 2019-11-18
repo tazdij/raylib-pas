@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="raylib_pas"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="Donald Duvall tazdij@github"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="..\libs"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Description Value="raylib binfing for pascal/fpc
+https://www.raylib.com/"/>
+    <Version Minor="1" Release="1" Build="1"/>
+    <Files Count="3">
+      <Item1>
+        <Filename Value="..\libs\raylib.pas"/>
+        <UnitName Value="raylib"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\libs\raymath.pas"/>
+        <UnitName Value="raymath"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\libs\rlgl.pas"/>
+        <UnitName Value="rlgl"/>
+      </Item3>
+    </Files>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
