@@ -263,19 +263,19 @@ type
   PCharInfo = ^TCharInfo;
   TCharInfo = packed record
     value : Integer;
+    Rectangle: TRectangle;
     offsetX : Integer;
     offsetY : Integer;
     advanceX : Integer;
-    image : TImage;
+    data : Pointer;
   end;
 
   // Font type, includes texture and charSet array data
   PFont = ^TFont;
   TFont = packed record
+    texture : TTexture2D;
     baseSize : Integer;
     charsCount : Integer;
-    texture : TTexture2D;
-    recs : PRectangle;
     chars : PCharInfo;
   end;
 
