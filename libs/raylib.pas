@@ -78,7 +78,7 @@
  CHANGELOG
  ----------------------------------------------------------------------------
  Version 2019.10.24
-   - raylib-pas for raylib 2.5.0
+   - raylib-pas for raylib 2.6.0-dev
 
 *******************************************************************************)
 
@@ -251,11 +251,11 @@ type
   PNPatchInfo = ^TNPatchInfo;
   TNPatchInfo = packed record
     sourceRec : TRectangle;
-	  left : Integer;
-	  top : Integer;
-  	right : Integer;
-  	bottom : Integer;
-  	&type : Integer;
+    left : Integer;
+    top : Integer;
+    right : Integer;
+    bottom : Integer;
+    &type : Integer;
   end;
 
 
