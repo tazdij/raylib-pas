@@ -8,7 +8,7 @@
 *       - Written in plain C code (C99) in PascalCase/camelCase notation
 *       - Hardware accelerated with OpenGL (1.1, 2.1, 3.3 or ES2 - choose at compile)
 *       - Unique OpenGL abstraction layer (usable as standalone module): [rlgl]
-*       - Powerful fonts module (XNA SpriteFonts, BMFonts, TTF)
+*       - Multiple Fonts formats supported (TTF, XNA fonts, AngelCode fonts)
 *       - Outstanding texture formats support, including compressed formats (DXT, ETC, ASTC)
 *       - Full 3d support for 3d Shapes, Models, Billboards, Heightmaps and more!
 *       - Flexible Materials system, supporting classic maps and PBR maps
@@ -33,7 +33,7 @@
 *       [core] rgif (Charlie Tangora, Ramon Santamaria) for GIF recording
 *       [textures] stb_image (Sean Barret) for images loading (BMP, TGA, PNG, JPEG, HDR...)
 *       [textures] stb_image_write (Sean Barret) for image writting (BMP, TGA, PNG, JPG)
-*       [textures] stb_image_resize (Sean Barret) for image resizing algorythms
+*       [textures] stb_image_resize (Sean Barret) for image resizing algorithms
 *       [textures] stb_perlin (Sean Barret) for Perlin noise image generation
 *       [text] stb_truetype (Sean Barret) for ttf fonts loading
 *       [text] stb_rect_pack (Sean Barret) for rectangles packing
@@ -52,7 +52,7 @@
 *   raylib is licensed under an unmodified zlib/libpng license, which is an OSI-certified,
 *   BSD-like license that allows static linking with closed source software:
 *
-*   Copyright (c) 2013-2019 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2013-2020 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -69,17 +69,22 @@
 *
 *     3. This notice may not be removed or altered from any source distribution.
 *
-**********************************************************************************************/
- raylib-pas - Header/DLLs Conversion
- Copyright (c) 2019 Duvall Industries LLC.
- All Rights Reserved.
- https://tazdij.com
-
- CHANGELOG
- ----------------------------------------------------------------------------
- Version 2019.10.24
-   - raylib-pas for raylib 2.6.0-dev
-
+********************************************************************************
+*
+* raylib-pas - Header/DLLs Conversion
+* Copyright (c) 2019 Duvall Industries LLC.
+* All Rights Reserved.
+* https://tazdij.com
+*
+* ----------------------------------------------------------------------------
+* CHANGELOG
+*
+* Version 2019.10.24
+*   - raylib-pas for raylib 2.6.0-dev
+*
+* Version 2020.09.17
+*   - raylib-pas for raylib 3.0.0-dev
+*
 *******************************************************************************)
 
 
@@ -108,7 +113,7 @@ type
 
   // Color type, RGBA (32bit)
   PColor = ^TColor;
-  TColor = packed record
+  TColor = {$IFDEF WINDOWS}packed{$IFEND}record
     r: Byte;
     g: Byte;
     b: Byte;
@@ -148,14 +153,14 @@ const
 
 type
   PVector2 = ^TVector2;
-  TVector2 = packed record
+  TVector2 = {$IFDEF WINDOWS}packed{$IFEND} record
     x: Single;
     y: Single;
   end;
 
   // Vector3 type
   PVector3 = ^TVector3;
-  TVector3 = packed record
+  TVector3 = {$IFDEF WINDOWS}packed{$IFEND} record
     x: Single;
     y: Single;
     z: Single;
@@ -163,7 +168,7 @@ type
 
   // Vector4 type
   PVector4 = ^TVector4;
-  TVector4 = packed record
+  TVector4 = {$IFDEF WINDOWS}packed{$IFEND} record
     x: Single;
     y: Single;
     z: Single;
@@ -176,7 +181,7 @@ type
 
   // Matrix type (OpenGL style 4x4 - right handed, column major)
   PMatrix = ^TMatrix;
-  TMatrix = packed record
+  TMatrix = {$IFDEF WINDOWS}packed{$IFEND} record
     m0: Single;
     m4: Single;
     m8: Single;
@@ -198,7 +203,7 @@ type
   // Rectangle type
   PPRectangle = ^PRectangle;
   PRectangle = ^TRectangle;
-  TRectangle = packed record
+  TRectangle = {$IFDEF WINDOWS}packed{$IFEND} record
     x: Single;
     y: Single;
     width: Single;
@@ -208,7 +213,7 @@ type
   // Image type, bpp always RGBA (32bit)
   // NOTE: Data stored in CPU memory (RAM)
   PImage = ^TImage;
-  TImage = packed record
+  TImage = {$IFDEF WINDOWS}packed{$IFEND} record
     data: Pointer;
     width: Integer;
     height: Integer;
@@ -219,7 +224,7 @@ type
   // Texture2D type
   // NOTE: Data stored in GPU memory
   PTexture2D = ^TTexture2D;
-  TTexture2D = packed record
+  TTexture2D = {$IFDEF WINDOWS}packed{$IFEND} record
     id: Cardinal;
     width: Integer;
     height: Integer;
@@ -236,7 +241,7 @@ type
 
   // RenderTexture2D type, for texture rendering
   PRenderTexture2D = ^TRenderTexture2D;
-  TRenderTexture2D = packed record
+  TRenderTexture2D = {$IFDEF WINDOWS}packed{$IFEND} record
     id : Cardinal;
     texture : TTexture2D;
     depth : TTexture2D;
@@ -249,7 +254,7 @@ type
 
   // N-Patch layout info
   PNPatchInfo = ^TNPatchInfo;
-  TNPatchInfo = packed record
+  TNPatchInfo = {$IFDEF WINDOWS}packed{$IFEND} record
     sourceRec : TRectangle;
     left : Integer;
     top : Integer;
@@ -261,7 +266,7 @@ type
 
   // Font character info
   PCharInfo = ^TCharInfo;
-  TCharInfo = packed record
+  TCharInfo = {$IFDEF WINDOWS}packed{$IFEND} record
     value : Integer;
     offsetX : Integer;
     offsetY : Integer;
@@ -271,7 +276,7 @@ type
 
   // Font type, includes texture and charSet array data
   PFont = ^TFont;
-  TFont = packed record
+  TFont = {$IFDEF WINDOWS}packed{$IFEND} record
     baseSize : Integer;
     charsCount : Integer;
     texture : TTexture2D;
@@ -286,7 +291,7 @@ type
 
   // Camera type, defines a camera position/orientation in 3d space
   PCamera3D = ^TCamera3D;
-  TCamera3D = packed record
+  TCamera3D = {$IFDEF WINDOWS}packed{$IFEND} record
     position : TVector3;
     target : TVector3;
     up : TVector3;
@@ -300,7 +305,7 @@ type
 
   // Camera2D type, defines a 2d camera
   PCamera2D = ^TCamera2D;
-  TCamera2D = packed record
+  TCamera2D = {$IFDEF WINDOWS}packed{$IFEND} record
     offset: TVector2;
     target: TVector2;
     rotation: Single;
@@ -310,7 +315,7 @@ type
   // Vertex data definning a mesh
   // NOTE: Data stored in CPU memory (and GPU)
   PMesh = ^TMesh;
-  TMesh = packed record
+  TMesh = {$IFDEF WINDOWS}packed{$IFEND} record
     vertexCount: Integer;
     triangleCount: Integer;
     
@@ -336,15 +341,14 @@ type
 
   // Shader type (generic)
   PShader = ^TShader;
-  TShader = packed record
+  TShader = {$IFDEF WINDOWS}packed{$IFEND} record
     id : Cardinal;
-    //locs: array[0..MAX_SHADER_LOCATIONS - 1] of Integer;
     locs : PInteger;
   end;
 
   // Material texture map
   PMaterialMap = ^TMaterialMap;
-  TMaterialMap = packed record
+  TMaterialMap = {$IFDEF WINDOWS}packed{$IFEND} record
     texture : TTexture2D;
     color : TColor;
     value : Single;
@@ -352,7 +356,7 @@ type
 
   // Material type (generic)
   PMaterial = ^TMaterial;
-  TMaterial = packed record
+  TMaterial = {$IFDEF WINDOWS}packed{$IFEND} record
     shader : TShader;
     maps : ^TMaterialMap;
     params : PSingle;
@@ -361,7 +365,7 @@ type
   // Transformation Properties
   PPTransform = ^PTransform;
   PTransform = ^TTransform;
-  TTransform = packed record
+  TTransform = {$IFDEF WINDOWS}packed{$IFEND} record
     translation : TVector3;
     rotation : TQuaternion;
     scale : TVector3;
@@ -369,16 +373,15 @@ type
 
   // Bone Information
   PBoneInfo = ^TBoneInfo;
-  TBoneInfo = packed record
+  TBoneInfo = {$IFDEF WINDOWS}packed{$IFEND} record
     &name : Array[0..31] of Char;
     parent : Integer;
   end;
 
   // Model type
   PModel = ^TModel;
-  TModel = packed record
+  TModel = {$IFDEF WINDOWS}packed{$IFEND} record
     transform : TMatrix;
-
     meshCount : Integer;
     meshes : PMesh;
 
@@ -394,7 +397,7 @@ type
 
   // Model Animation
   PModelAnimation = ^TModelAnimation;
-  TModelAnimation = packed record
+  TModelAnimation = {$IFDEF WINDOWS}packed{$IFEND} record
     boneCount : Integer;
     bones : PBoneInfo;
 
@@ -404,14 +407,14 @@ type
 
   // Ray type (useful for raycast)
   PRay = ^TRay;
-  TRay = packed record
+  TRay = {$IFDEF WINDOWS}packed{$IFEND} record
     position : TVector3;
     direction : TVector3;
   end;
 
   // Raycast hit information
   PRayHitInfo = ^TRayHitInfo;
-  TRayHitInfo = packed record
+  TRayHitInfo = {$IFDEF WINDOWS}packed{$IFEND} record
     hit : Boolean;
     distance : Single;
     position : TVector3;
@@ -420,18 +423,18 @@ type
 
   // Bounding box type
   PBoundingBox = ^TBoundingBox;
-  TBoundingBox = packed record
+  TBoundingBox = {$IFDEF WINDOWS}packed{$IFEND} record
     min : TVector3;
     max : TVector3;
   end;
 
 // Wave type, defines audio wave data
   PWave = ^TWave;
-  TWave = packed record
-    sampleCount : Cardinal;
-    sampleRate : Cardinal;
-    sampleSize : Cardinal;
-    channels : Cardinal;
+  TWave = {$IFDEF WINDOWS}packed{$IFEND} record
+    sampleCount : dword;
+    sampleRate : dword;
+    sampleSize : dword;
+    channels : dword;
     data : Pointer;
   end;
 
@@ -442,38 +445,33 @@ type
   // Audio stream type
   // NOTE: Useful to create custom audio streams not bound to a specific file
   PAudioStream = ^TAudioStream;
-  TAudioStream = packed record
-    sampleRate: Cardinal;
-    sampleSize: Cardinal;
-    channels: Cardinal;
-
+  TAudioStream = {$IFDEF WINDOWS}packed{$IFEND} record
+    sampleRate: dword;
+    sampleSize: dword;
+    channels: dword;
     buffer : PrAudioBuffer;
   end;
 
   // Sound source type
   PSound = ^TSound;
-  TSound = packed record
-    sampleCount : Cardinal;
+  TSound = {$IFDEF WINDOWS}packed{$IFEND} record
+    sampleCount : dword;
     stream : TAudioStream
   end;
 
   // Music type (file streaming from memory)
   // NOTE: Anything longer than ~10 seconds should be streamed
   TMusic = record
-    ctxType : Integer;
+    ctxType : longint;
     ctxData : Pointer;
-
-    sampleCount : Cardinal;
-    loopCount : Cardinal;
-
+    sampleCount : dword;
+    looping : boolean;
     stream : TAudioStream;
   end;
 
-  
-
   // Head-Mounted-Display device parameters
   PVrDeviceInfo = ^TVrDeviceInfo;
-  TVrDeviceInfo = packed record
+  TVrDeviceInfo = {$IFDEF WINDOWS}packed{$IFEND} record
     hResolution: Integer;
     vResolution: Integer;
     hScreenSize: Single;
@@ -489,7 +487,7 @@ type
 const
 
   // raylib Config Flags
-  FLAG_SHOW_LOGO           =   1;
+  FLAG_RESERVED =   1;
   FLAG_FULLSCREEN_MODE     =   2;
   FLAG_WINDOW_RESIZABLE    =   4;
   FLAG_WINDOW_UNDECORATED  =   8;
@@ -829,17 +827,8 @@ const
   NPT_3PATCH_VERTICAL   = 1;
   NPT_3PATCH_HORIZONTAL = 2;
 
-  // Head Mounted Display devices
-  (*HMD_DEFAULT_DEVICE   = 0;
-  HMD_OCULUS_RIFT_DK2  = 1;
-  HMD_OCULUS_RIFT_CV1  = 2;
-  HMD_OCULUS_GO        = 3;
-  HMD_VALVE_HTC_VIVE   = 4;
-  HMD_SONY_PSVR        = 5;*)
-
 type
   TTraceLogCallback = procedure(aLogType : Integer; aText, aArgs : PAnsiChar); cdecl;
-
 
 // Window-related functions
 procedure InitWindow(aWidth: Integer; aHeight: Integer; aTitle: PAnsiChar); cdecl; external cDllName;
@@ -849,6 +838,7 @@ function  IsWindowReady(): Boolean; cdecl; external cDllName;
 function  IsWindowMinimized(): Boolean; cdecl; external cDllName;
 function  IsWindowResized(): Boolean; cdecl; external cDllName;
 function  IsWindowHidden(): Boolean; cdecl; external cDllName;
+function  IsWindowFullscreen():Boolean; cdecl; external cDllName;
 procedure ToggleFullscreen(); cdecl; external cDllName;
 procedure UnhideWindow(); cdecl; external cDllName;
 procedure HideWindow(); cdecl; external cDllName;
@@ -866,6 +856,7 @@ function  GetMonitorWidth(aMonitor : Integer): Integer; cdecl; external cDllName
 function  GetMonitorHeight(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetMonitorPhysicalWidth(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetMonitorPhysicalHeight(aMonitor : Integer): Integer; cdecl; external cDllName;
+function  GetWindowPosition(): TVector2; cdecl; external cDllName; // Get window position XY on monitor
 function  GetMonitorName(aMonitor : Integer): PAnsiChar; cdecl; external cDllName;
 function  GetClipboardText(): PAnsiChar; cdecl; external cDllName;
 procedure SetClipboardText(aText : PAnsiChar); cdecl; external cDllName;
@@ -898,7 +889,6 @@ function  GetWorldToScreen(aPosition: TVector3; aCamera: TCamera): TVector2; cde
 function  GetWorldToScreen2D(aPosition : TVector2; aCamera : TCamera2D): TVector2; cdecl; external cDllName;
 function  GetScreenToWorld2D(aPosition : TVector2; aCamera : TCamera2D): TVector2; cdecl; external cDllName;
 
-
 // Timming-related functions
 procedure SetTargetFPS(aFPS: Integer); cdecl; external cDllName;
 function  GetFPS(): Integer; cdecl; external cDllName;
@@ -915,7 +905,6 @@ function  GetColor(aHexValue: Integer): TColor; cdecl; external cDllName;
 function  Fade(aColor: TColor; aAlpha: Single): TColor; cdecl; external cDllName;
 
 // Misc. functions
-//procedure ShowLogo(); cdecl; external cDllName; (Removed from raylib.h)?
 procedure SetConfigFlags(aFlags : Cardinal); cdecl; external cDllName;
 procedure SetTraceLogLevel(aLogType : Integer); cdecl; external cDllName;
 procedure SetTraceLogExit(aLogType : Integer); cdecl; external cDllName;
@@ -925,6 +914,10 @@ procedure TakeScreenshot(aFilename : PAnsiChar); cdecl; external cDllName;
 function  GetRandomValue(aMin : Integer; aMax : Integer): Integer; cdecl; external cDllName;
 
 // Files management functions
+function  LoadFileData(aFileName: PAnsiChar; bytesRead: PCardinal): PAnsiChar; cdecl; external;
+procedure SaveFileData(aFileName: PAnsiChar; aData: Pointer; bytesToWrite: Cardinal); cdecl; external;
+function  LoadFileText(aFileName: PAnsiChar): PAnsiChar; cdecl; external cDllName;
+procedure SaveFileText(aFileName: PAnsiChar; aText: PAnsiChar); cdecl; external cDllName;
 function  FileExists(aFilename : PAnsiChar): Boolean; cdecl; external cDllName;
 function  IsFileExtension(aFilename: PAnsiChar; aExt: PAnsiChar): Boolean; cdecl; external cDllName;
 function  DirectoryExists(aDirPath : PAnsiChar): Boolean; cdecl; external cDllName;
@@ -1037,9 +1030,11 @@ procedure DrawCircleGradient(aCenterX: Integer; aCenterY: Integer; aRadius: Sing
 procedure DrawCircleV(aCenter: TVector2; aRadius: Single; TColor: TColor); cdecl; external cDllName;
 procedure DrawCircleLines(aCenterX: Integer; aCenterY: Integer; aRadius: Single; aColor: TColor); cdecl; external cDllName;
 
+procedure DrawEllipse(aCenterX: Integer; aCenterY: Integer; aRadiusH: Single; aRadiusV: Single; aColor:TColor); cdecl; external cDllName;
+procedure DrawEllipseLines(aCenterX: Integer; aCenterY: Integer; aRadiusH: Single; aRadiusV: Single; aColor:TColor); cdecl; external cDllName;
+
 procedure DrawRing( aCenter : TVector2; aInnerRadius, aOuterRadius : Single; aStartAngle, aEndAngle, aSegments : Integer; aColor : TColor); cdecl; external cDllName;
 procedure DrawRingLines( aCenter : TVector2; aInnerRadius, aOuterRadius : Single; aStartAngle, aEndAngle, aSegments : Integer; aColor : TColor); cdecl; external cDllName;
-
 
 procedure DrawRectangle(aPosX: Integer; aPosY: Integer; aWidth: Integer; aHeight: Integer; aColor: TColor); cdecl; external cDllName;
 procedure DrawRectangleV(aPosition: TVector2; size: TVector2; TColor: TColor); cdecl; external cDllName;
@@ -1059,11 +1054,7 @@ procedure DrawTriangleLines(aVec1: TVector2; aVec2: TVector2; aVec3: TVector2; a
 procedure DrawTriangleFan(aPoints : PVector2; aNumPoints : Integer; aColor : TColor); cdecl; external cDllName;
 procedure DrawTriangleStrip(aPoints : PVector2; aPointsCount : Integer; aColor : TColor); cdecl; external cDllName;
 procedure DrawPoly(aCenter: TVector2; aSides: Integer; aRadius: Single; aRotation: Single; aColor: TColor); cdecl; external cDllName;
-
-//procedure DrawPolyEx(var aPoints: TVector2; aNumPoints: Integer; aColor: TColor); cdecl; external cDllName;
-//procedure DrawPolyExLines(var aPoints: TVector2; aNumPoints: Integer; aColor: TColor); cdecl; external cDllName;
-
-procedure SetShapesTexture(aTexture : TTexture2D; aSource : TRectangle); cdecl; external cDllName;
+procedure DrawPolyLines(aCenter: TVector2; aSides: Integer; aRadius: Single; aRotation:Single; aColor: TColor); cdecl; external cDllName;
 
 // Basic shapes collision detection functions
 function  CheckCollisionRecs(aRect1: TRectangle; aRect2: TRectangle): Boolean; cdecl; external cDllName;
@@ -1078,31 +1069,33 @@ function  CheckCollisionPointTriangle(aPoint: TVector2; aP1: TVector2; aP2: TVec
 // Texture Loading and Drawing Functions (Module: textures)
 //------------------------------------------------------------------------------------
 
-// TImage/TTexture2D data loading/unloading/saving functions
+// Image loading functions
+// NOTE: This functions do not require GPU access
 function  LoadImage(aFilename: PAnsiChar): TImage; cdecl; external cDllName;
 function  LoadImageEx(aPixels: PColor; aWidth: Integer; aHeight: Integer): TImage; cdecl; external cDllName;
 function  LoadImagePro(aData: Pointer; aWidth: Integer; aHeight: Integer; aFormat: Integer): TImage; cdecl; external cDllName;
 function  LoadImageRaw(aFilename: PAnsiChar; aWidth: Integer; aHeight: Integer; aFormat: Integer; headerSize: Integer): TImage; cdecl; external cDllName;
+procedure UnloadImage(aImage: TImage); cdecl; external cDllName;
 procedure ExportImage(aFilename: PAnsiChar; TImage: TImage); cdecl; external cDllName;
 procedure ExportImageAsCode(aImage : TImage; aFilename : PAnsiChar); cdecl; external cDllName;
-function  LoadTexture(aFilename: PAnsiChar): TTexture2D; cdecl; external cDllName;
-function  LoadTextureFromImage(aImage: TImage): TTexture2D; cdecl; external cDllName;
-function  LoadTextureCubemap(aImage : TImage; aLayoutType : Integer) : TTextureCubemap; cdecl; external cDllName;
-function  LoadRenderTexture(aWidth: Integer; aHeight: Integer): TRenderTexture2D; cdecl; external cDllName;
-procedure UnloadImage(aImage: TImage); cdecl; external cDllName;
-procedure UnloadTexture(aTexture: TTexture2D); cdecl; external cDllName;
-procedure UnloadRenderTexture(aTarget: TRenderTexture2D); cdecl; external cDllName;
 function  GetImageData(aImage: TImage): PColor; cdecl; external cDllName;
 function  GetImageDataNormalized(aImage: TImage): PVector4; cdecl; external cDllName;
-function  GetImageAlphaBorder(aImage : TImage; aThreshold : Single): TRectangle; cdecl; external cDllName;
-function  GetPixelDataSize(aWidth: Integer; aHeight: Integer; aFormat: Integer): Integer; cdecl; external cDllName;
-function  GetTextureData(aTexture: TTexture2D): TImage; cdecl; external cDllName;
-function  GetScreenData(): TImage; cdecl; external cDllName;
-procedure UpdateTexture(aTexture: TTexture2D; aPixels: Pointer); cdecl; external cDllName;
+
+// TImage generation functions
+function  GenImageColor(aWidth: Integer; aHeight: Integer; aColor: TColor): TImage; cdecl; external cDllName;
+function  GenImageGradientV(aWidth: Integer; aHeight: Integer; aTop: TColor; aBottom: TColor): TImage; cdecl; external cDllName;
+function  GenImageGradientH(aWidth: Integer; aHeight: Integer; aLeft: TColor; aRight: TColor): TImage; cdecl; external cDllName;
+function  GenImageGradientRadial(aWidth: Integer; aHeight: Integer; aDensity: Single; aInner: TColor; aOuter: TColor): TImage; cdecl; external cDllName;
+function  GenImageChecked(aWidth: Integer; aHeight: Integer; aChecksX: Integer; aChecksY: Integer; aCol1: TColor; aCol2: TColor): TImage; cdecl; external cDllName;
+function  GenImageWhiteNoise(aWidth: Integer; aHeight: Integer; aFactor: Single): TImage; cdecl; external cDllName;
+function  GenImagePerlinNoise(aWidth: Integer; aHeight: Integer; aOffsetX: Integer; aOffsetY: Integer; aScale: Single): TImage; cdecl; external cDllName;
+function  GenImageCellular(aWidth: Integer; aHeight: Integer; aTileSize: Integer): TImage; cdecl; external cDllName;
 
 // TImage manipulation functions
 function  ImageCopy(aImage: TImage): TImage; cdecl; external cDllName;
 function  ImageFromImage(aImage : TImage; aRec : TRectangle): TImage; cdecl; external cDllName;
+function  ImageText(aText: PAnsiChar; aFontSize: Integer; aColor: TColor): TImage; cdecl; external cDllName;
+function  ImageTextEx(aFont: TFont; aText: PAnsiChar; aFontSize: Single; aSpacing: Single; aTint: TColor): TImage; cdecl; external cDllName;
 procedure ImageToPOT(aImage: PImage; fillColor: TColor); cdecl; external cDllName;
 procedure ImageFormat(aImage: PImage; aNewFormat: Integer); cdecl; external cDllName;
 procedure ImageAlphaMask(aImage : PImage; alphaMask: TImage); cdecl; external cDllName;
@@ -1115,14 +1108,6 @@ procedure ImageResizeNN(aImage : PImage; aNewWidth: Integer; aNewHeight: Integer
 procedure ImageResizeCanvas(aImage : PImage; aNewWidth: Integer; aNewHeight: Integer; aOffsetX: Integer; aOffsetY: Integer; aColor: TColor); cdecl; external cDllName;
 procedure ImageMipmaps(aImage : PImage); cdecl; external cDllName;
 procedure ImageDither(aImage : PImage; aRedBpp: Integer; aGreenBpp: Integer; aBlueBpp: Integer; aAlphaBpp: Integer); cdecl; external cDllName;
-function  ImageExtractPalette(aImage : TImage; aMaxPaletteSize : Integer; aExtractCount : PInteger): PColor; cdecl; external cDllName;
-function  ImageText(aText: PAnsiChar; aFontSize: Integer; aColor: TColor): TImage; cdecl; external cDllName;
-function  ImageTextEx(aFont: TFont; aText: PAnsiChar; aFontSize: Single; aSpacing: Single; aTint: TColor): TImage; cdecl; external cDllName;
-procedure ImageDraw(aDest : PImage; aSrc: TImage; aSrcRec: TRectangle; aDestRec: TRectangle); cdecl; external cDllName;
-procedure ImageDrawRectangle(aDest : PImage; aPosition: TVector2; aRe: TRectangle; aColor: TColor); cdecl; external cDllName;
-procedure ImageDrawRectangleLines(aDst : PImage; aRec : TRectangle; aThick : Integer; aColor : TColor); cdecl; external cDllName;                   // Draw rectangle lines within an image
-procedure ImageDrawText(aDest : PImage; aPosition: TVector2; aText: PAnsiChar; aFontSize: Integer; aColor: TColor); cdecl; external cDllName;
-procedure ImageDrawTextEx(aDest : PImage; aPosition: TVector2; TFont: TFont; aText: PAnsiChar; aFontSize: Single; aSpacing: Single; aColor: TColor); cdecl; external cDllName;
 procedure ImageFlipVertical(aImage : PImage); cdecl; external cDllName;
 procedure ImageFlipHorizontal(aImage : PImage); cdecl; external cDllName;
 procedure ImageRotateCW(aImage : PImage); cdecl; external cDllName;
@@ -1133,16 +1118,37 @@ procedure ImageColorGrayscale(aImage : PImage); cdecl; external cDllName;
 procedure ImageColorContrast(aImage : PImage; aContrast: Single); cdecl; external cDllName;
 procedure ImageColorBrightness(aImage : PImage; aBrightness: Integer); cdecl; external cDllName;
 procedure ImageColorReplace(aImage : PImage; aColor: TColor; aReplace: TColor); cdecl; external cDllName;
+function  ImageExtractPalette(aImage : TImage; aMaxPaletteSize : Integer; aExtractCount : PInteger): PColor; cdecl; external cDllName;
+function  GetImageAlphaBorder(aImage : TImage; aThreshold : Single): TRectangle; cdecl; external cDllName;
 
-// TImage generation functions
-function  GenImageColor(aWidth: Integer; aHeight: Integer; aColor: TColor): TImage; cdecl; external cDllName;
-function  GenImageGradientV(aWidth: Integer; aHeight: Integer; aTop: TColor; aBottom: TColor): TImage; cdecl; external cDllName;
-function  GenImageGradientH(aWidth: Integer; aHeight: Integer; aLeft: TColor; aRight: TColor): TImage; cdecl; external cDllName;
-function  GenImageGradientRadial(aWidth: Integer; aHeight: Integer; aDensity: Single; aInner: TColor; aOuter: TColor): TImage; cdecl; external cDllName;
-function  GenImageChecked(aWidth: Integer; aHeight: Integer; aChecksX: Integer; aChecksY: Integer; aCol1: TColor; aCol2: TColor): TImage; cdecl; external cDllName;
-function  GenImageWhiteNoise(aWidth: Integer; aHeight: Integer; aFactor: Single): TImage; cdecl; external cDllName;
-function  GenImagePerlinNoise(aWidth: Integer; aHeight: Integer; aOffsetX: Integer; aOffsetY: Integer; aScale: Single): TImage; cdecl; external cDllName;
-function  GenImageCellular(aWidth: Integer; aHeight: Integer; aTileSize: Integer): TImage; cdecl; external cDllName;
+// Image drawing functions
+// NOTE: Image software-rendering functions (CPU)
+procedure ImageClearBackground(aDst: PImage; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawPixel(aDst: PImage; aPosX: Integer; aPosY: Integer; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawPixelV(aDst: PImage; aPosition: TVector2; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawLine(aDst: PImage; aStartPosX: Integer; aStartPosY: Integer; aEndPosX: Integer; aEndPosY: Integer; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawLineV(aDst: PImage; aStart: TVector2; aEnd: TVector2; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawCircle(aDst: PImage; aCenterX: Integer; aCenterY: Integer; aRadius: Integer; aColor:TColor); cdecl; external cDllName;
+procedure ImageDrawCircleV(aDst: PImage; aCenter: TVector2; aRadius: Integer; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawRectangle(aDst: PImage; aPosX: Integer; aPosY: Integer; aWidth: Integer; aHeight: Integer); cdecl; external cDllName;
+procedure ImageDrawRectangleV(aDst: PImage; aPosition: TVector2; aSize: TVector2; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawRectangleRec(aDst: PImage; aRec: TRectangle; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawRectangleLines(aDst : PImage; aRec : TRectangle; aThick : Integer; aColor : TColor); cdecl; external cDllName;                   // Draw rectangle lines within an image
+procedure ImageDraw(aDest : PImage; aSrc: TImage; aSrcRec: TRectangle; aDestRec: TRectangle; aTint: TColor); cdecl; external cDllName;
+procedure ImageDrawText(aDest : PImage; aPosition: TVector2; aText: PAnsiChar; aFontSize: Integer; aColor: TColor); cdecl; external cDllName;
+procedure ImageDrawTextEx(aDest : PImage; aPosition: TVector2; TFont: TFont; aText: PAnsiChar; aFontSize: Single; aSpacing: Single; aColor: TColor); cdecl; external cDllName;
+
+// Texture loading functions
+// NOTE: These functions require GPU access
+function  LoadTexture(aFilename: PAnsiChar): TTexture2D; cdecl; external cDllName;
+function  LoadTextureFromImage(aImage: TImage): TTexture2D; cdecl; external cDllName;
+function  LoadTextureCubemap(aImage : TImage; aLayoutType : Integer) : TTextureCubemap; cdecl; external cDllName;
+function  LoadRenderTexture(aWidth: Integer; aHeight: Integer): TRenderTexture2D; cdecl; external cDllName;
+procedure UnloadTexture(aTexture: TTexture2D); cdecl; external cDllName;
+procedure UnloadRenderTexture(aTarget: TRenderTexture2D); cdecl; external cDllName;
+procedure UpdateTexture(aTexture: TTexture2D; aPixels: Pointer); cdecl; external cDllName;
+function  GetTextureData(aTexture: TTexture2D): TImage; cdecl; external cDllName;
+function  GetScreenData(): TImage; cdecl; external cDllName;
 
 // TTexture2D configuration functions
 procedure GenTextureMipmaps(aTexture: PTexture2D); cdecl; external cDllName;
@@ -1157,6 +1163,9 @@ procedure DrawTextureRec(aTexture: TTexture2D; sourceRec: TRectangle; aPosition:
 procedure DrawTextureQuad(aTexture: TTexture2D; aTiling, aOffset : TVector2; aQuad : TRectangle; aTint : TColor); cdecl; external cDllName;
 procedure DrawTexturePro(aTexture: TTexture2D; sourceRec: TRectangle; aDestRec: TRectangle; aOrigin: TVector2; aRotation: Single; aTint: TColor); cdecl; external cDllName;
 procedure DrawTextureNPatch(aTexture: TTexture2D; aNPatchInfo : TNPatchInfo; aDestRec : TRectangle; aOrigin : TVector2; aRotation : Single; aTint : TColor); cdecl; external cDllName;
+
+// Image/Texture misc functions
+function  GetPixelDataSize(aWidth: Integer; aHeight: Integer; aFormat: Integer): Integer; cdecl; external cDllName;
 
 //------------------------------------------------------------------------------------
 // TFont Loading and Text Drawing Functions (Module: text)
@@ -1178,18 +1187,19 @@ procedure DrawTextEx(aFont: TFont; aText: PAnsiChar; aPosition: TVector2; aFontS
 procedure DrawTextRec(afont : TFont; aText : PAnsiChar; rec : TRectangle; aFontSize, aSpacing : Single; aWordWrap : Boolean; aTint : TColor); cdecl; external cDllName;   // Draw text using font inside rectangle limits
 procedure DrawTextRecEx(aFont : TFont; aText : PAnsiChar; aRec : TRectangle; aFontSize, aSpacing : Single; aWordWrap : Boolean; aTint : TColor;
                         aSelectStart, aSelectLength : Integer; aSelectText, selectBack : TColor); cdecl; external cDllName;
+procedure DrawTextCodepoint(aFont:TFont; aCodepoint: Integer; aPosition: TVector2; aScale: Single; aColor: TColor); cdecl; external cDllName;
 
 // Text misc. functions
 function  MeasureText(aText: PAnsiChar; aFontSize: Integer): Integer; cdecl; external cDllName;
 function  MeasureTextEx(aFont: TFont; aText: PAnsiChar; aFontSize, aSpacing: Single): TVector2; cdecl; external cDllName;
 function  GetGlyphIndex(aFont: TFont; character: Integer): Integer; cdecl; external cDllName;
-//function  FetNextCodepoint(aText : PAnsiChar; aCount : PInteger): Integer; cdecl; external cDllName;
 
-// Text Strings Management Functions
+// Text strings management functions (no utf8 strings, only byte chars)
+// NOTE: Some strings allocate memory internally for returned strings, just be careful!
+function  TextCopy(aDst: PAnsiChar;aScr: PAnsichar): Integer; cdecl; external cDllName;
 function  TextIsEqual(aText1, aText2 : PAnsiChar): Boolean; cdecl; external cDllName;
 function  TextLength(aText : PAnsiChar): Cardinal; cdecl; external cDllName;
-function  TextCountCodepoints(aText : PAnsiChar) : Cardinal; cdecl; external cDllName;
-function  TextFormat(aText: PAnsiChar): PAnsiChar; cdecl; external cDllName;
+function  TextFormat(aText: PAnsiChar; aArg:integer): PAnsiChar; cdecl; external cDllName;//3.0.0
 function  TextSubtext(aText: PAnsiChar; aPosition: Integer; aLength: Integer): PAnsiChar; cdecl; external cDllName;
 function  TextReplace(aText, aReplace, aBy : PAnsiChar): PAnsiChar; cdecl; external cDllName;
 function  TextInsert(aText, aInsert : PAnsiChar; aPosition : Integer): PAnsiChar; cdecl; external cDllName;           // Insert text in a position (memory should be freed!)
@@ -1209,14 +1219,12 @@ function  GetCodepointsCount(aText : PAnsiChar) : Integer; cdecl; external cDllN
 function  GetNextCodepoint(aText : PAnsiChar; aBytesProcessed : PInteger): Integer; cdecl; external cDllName;    // Returns next codepoint in a UTF8 encoded string; 0x3f('?') is returned on failure
 function  CodepointToUtf8(aCodepoint : Integer; aByteLength : PInteger): PAnsiChar; cdecl; external cDllName;    // Encode codepoint into utf8 text (char array length returned as parameter)
 
-
-
 //------------------------------------------------------------------------------------
 // Basic 3d Shapes Drawing Functions (Module: models)
 //------------------------------------------------------------------------------------
-
 // Basic geometric 3D shapes drawing functions
 procedure DrawLine3D(aStartPos: TVector3; aEndPos: TVector3; aColor: TColor); cdecl; external cDllName;
+procedure DrawPoint3D(aPosition: TVector3; aColor:TColor); cdecl; external cDllName;
 procedure DrawCircle3D(aCenter: TVector3; aRadius: Single; aRotationAxis: TVector3; aRotationAngle: Single; aColor: TColor); cdecl; external cDllName;
 procedure DrawCube(aPosition: TVector3; aWidth: Single; aHeight: Single; aLength: Single; aColor: TColor); cdecl; external cDllName;
 procedure DrawCubeV(aPosition: TVector3; aSize: TVector3; aColor: TColor); cdecl; external cDllName;
@@ -1244,7 +1252,7 @@ function  LoadModelFromMesh(aMesh: TMesh): TModel; cdecl; external cDllName;
 procedure UnloadModel(aModel: TModel); cdecl; external cDllName;
 
 // TMesh loading/unloading functions
-function  LoadMeshes(aFilename: PAnsiChar; aCount : PInteger): TMesh; cdecl; external cDllName;
+function  LoadMeshes(aFilename: PAnsiChar; aCount : PInteger): PMesh; cdecl; external cDllName;
 procedure ExportMesh(aMesh: TMesh; aFilename: PAnsiChar); cdecl; external cDllName;
 procedure UnloadMesh(aMesh: TMesh); cdecl; external cDllName;
 
@@ -1304,13 +1312,15 @@ function GetCollisionRayGround(aRay: TRay; aGroundHeight: Single): TRayHitInfo; 
 //------------------------------------------------------------------------------------
 
 // TShader loading/unloading functions
-function  LoadText(aFilename: PAnsiChar): PAnsiChar; cdecl; external cDllName;
 function  LoadShader(avsFileName: PAnsiChar; afsFileName: PAnsiChar): TShader; cdecl; external cDllName;
 function  LoadShaderCode(avsCode: PAnsiChar; afsCode: PAnsiChar): TShader; cdecl; external cDllName;
 procedure UnloadShader(aShader: TShader); cdecl; external cDllName;
 
 function  GetShaderDefault(): TShader; cdecl; external cDllName;
 function  GetTextureDefault(): TTexture2D; cdecl; external cDllName;
+function  GetShapesTexture(): TTexture2D; cdecl; external cDllName;
+function  GetShapesTextureRec(): TRectangle; cdecl; external cDllName;
+procedure SetShapesTexture(aTexture : TTexture2D; aSource : TRectangle); cdecl; external cDllName;
 
 // TShader configuration functions
 function  GetShaderLocation(aShader: TShader; aUniformName: PAnsiChar): Integer; cdecl; external cDllName;
@@ -1337,7 +1347,6 @@ procedure BeginBlendMode(aMode : Integer); cdecl; external cDllName;            
 procedure EndBlendMode();cdecl; external cDllName;                                            // End blending mode (reset to default: alpha blending)
 
 // VR control functions
-//function  GetVrDeviceInfo(avrDeviceType: Integer): TVrDeviceInfo; cdecl; external cDllName;
 procedure InitVrSimulator(); cdecl; external cDllName;
 procedure CloseVrSimulator(); cdecl; external cDllName;
 procedure UpdateVrTracking(aCamera: PCamera); cdecl; external cDllName;
@@ -1373,7 +1382,7 @@ procedure StopSound(aSound: TSound); cdecl; external cDllName;
 procedure PauseSound(aSound: TSound); cdecl; external cDllName;
 procedure ResumeSound(aSound: TSound); cdecl; external cDllName;
 procedure PlaySoundMulti(aSound: TSound); cdecl; external cDllName;
-procedure StopSoundMulti(aSound : TSound); cdecl; external cDllName;
+procedure StopSoundMulti(); cdecl; external cDllName;
 function  GetSoundsPlaying(): Integer; cdecl; external cDllName;
 function  IsSoundPlaying(aSound: TSound): Boolean; cdecl; external cDllName;
 procedure SetSoundVolume(aSound: TSound; aVolume: Single); cdecl; external cDllName;
@@ -1410,7 +1419,7 @@ function  IsAudioStreamPlaying(aStream: TAudioStream): Boolean; cdecl; external 
 procedure StopAudioStream(aStream: TAudioStream); cdecl; external cDllName;
 procedure SetAudioStreamVolume(aStream: TAudioStream; aVolume: Single); cdecl; external cDllName;
 procedure SetAudioStreamPitch(aStream: TAudioStream; aPitch: Single); cdecl; external cDllName;
-
+procedure SetAudioStreamBufferSizeDefault(aSize: Integer); cdecl; external cDllName;
 
 // Custom Misc Functions to help simplify a few things
 function Vector2Create(aX: Single; aY: Single) : TVector2;

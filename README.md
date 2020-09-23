@@ -1,4 +1,4 @@
-# raylib-pas A Pascal Binding for Raylib 2.6.0-dev (master)
+# raylib-pas A Pascal Binding for Raylib 3.0.0 (master)
 
 raylib-pas is a header translation of the [Raylib Game Development Library](https://www.raylib.com/) for the [FreePascal Project](https://www.freepascal.org/).
 
