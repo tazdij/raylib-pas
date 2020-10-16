@@ -8,7 +8,7 @@ unit raylib_dsgn;
 interface
 
 uses
-  raylib_descriptors, LazarusPackageIntf;
+  raylib_descriptors, raylib_app, LazarusPackageIntf;
 
 implementation
 

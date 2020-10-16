@@ -7,17 +7,22 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+        <OtherUnitFiles Value="common;engine"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/raylib_dsgn/"/>
       </SearchPaths>
     </CompilerOptions>
     <Description Value="design time package for raylib pas"/>
     <Version Minor="1" Release="1" Build="1"/>
-    <Files Count="1">
+    <Files Count="2">
       <Item1>
-        <Filename Value="raylib_descriptors.pas"/>
+        <Filename Value="common/raylib_descriptors.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="raylib_descriptors"/>
       </Item1>
+      <Item2>
+        <Filename Value="engine/raylib_app.pas"/>
+        <UnitName Value="raylib_app"/>
+      </Item2>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>
