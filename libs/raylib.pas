@@ -85,8 +85,33 @@
 * Version 2020.09.17
 *   - raylib-pas for raylib 3.0.0-dev
 *
+* Version 2021.05.22
+*   - raylib-pas for raylib 3.7.0-dev
+*     * Binaries for windows 32 & 64 included, precompiled, both Debug and Release
+*     * Start working on Bundling libraylib.a for static linking on Linux and Mac?
+*
+*
 *******************************************************************************)
 
+
+{%region 'Pascal Wrapper TODO'}
+(*
+   This is a todo comment, wrapped in a region (simplifying the collapsing) :)
+
+   ## Non Standard Pascal Addons:
+
+   This might be rather contreversial but, I want to add some creature features
+   into the wrapper. I don't plan to include them directly in this unit, keeping
+   the "Translation" portiong as pure as I know how. But in an additional
+   'RaylibExt' unit, I hope to add convenience and featureful additions to
+   simplify patterns and common code.
+
+   This is in an effort to prep for my new    game project 'Dawn Viking'. "An
+   isometric 2d farm & town game life sim" similar in spirit and emotion to
+   Harvest Moon 64.
+
+*)
+{%endregion}
 
 unit raylib;
 
@@ -96,7 +121,14 @@ unit raylib;
 interface
 
 const
-  cDllName = {$IFDEF WINDOWS} 'raylib.dll' {$IFEND}
+  cDllName = {$IFDEF WINDOWS}
+
+                     {$IFDEF DEBUG}
+                             {$IFDEF WIN64} 'libraylib64-debug.dll' {$ELSE} 'libraylib32-debug.dll' {$ENDIF}
+                     {$ELSE}
+                            {$IFDEF WIN64} 'libraylib64.dll' {$ELSE} 'libraylib32.dll' {$ENDIF}
+                     {$ENDIF}
+             {$IFEND}
              {$IFDEF DARWIN} 'libraylib.dylib' {$IFEND}
              {$IFDEF LINUX} 'libraylib.so' {$IFEND};
 
@@ -114,11 +146,12 @@ type
   // Color type, RGBA (32bit)
   PColor = ^TColor;
   TColor = {$IFDEF WINDOWS}packed{$IFEND}record
-    r: Byte;
-    g: Byte;
-    b: Byte;
-    a: Byte;
+    r : Byte;
+    g : Byte;
+    b : Byte;
+    a : Byte;
   end;
+
 
 
 const
@@ -154,25 +187,25 @@ const
 type
   PVector2 = ^TVector2;
   TVector2 = {$IFDEF WINDOWS}packed{$IFEND} record
-    x: Single;
-    y: Single;
+    x : Single;
+    y : Single;
   end;
 
   // Vector3 type
   PVector3 = ^TVector3;
   TVector3 = {$IFDEF WINDOWS}packed{$IFEND} record
-    x: Single;
-    y: Single;
-    z: Single;
+    x : Single;
+    y : Single;
+    z : Single;
   end;
 
   // Vector4 type
   PVector4 = ^TVector4;
   TVector4 = {$IFDEF WINDOWS}packed{$IFEND} record
-    x: Single;
-    y: Single;
-    z: Single;
-    w: Single;
+    x : Single;
+    y : Single;
+    z : Single;
+    w : Single;
   end;
 
   // Quaternion type, same as Vector4
@@ -182,85 +215,87 @@ type
   // Matrix type (OpenGL style 4x4 - right handed, column major)
   PMatrix = ^TMatrix;
   TMatrix = {$IFDEF WINDOWS}packed{$IFEND} record
-    m0: Single;
-    m4: Single;
-    m8: Single;
-    m12: Single;
-    m1: Single;
-    m5: Single;
-    m9: Single;
-    m13: Single;
-    m2: Single;
-    m6: Single;
-    m10: Single;
-    m14: Single;
-    m3: Single;
-    m7: Single;
-    m11: Single;
-    m15: Single;
+    m0  : Single;
+    m4  : Single;
+    m8  : Single;
+    m12 : Single;
+    m1  : Single;
+    m5  : Single;
+    m9  : Single;
+    m13 : Single;
+    m2  : Single;
+    m6  : Single;
+    m10 : Single;
+    m14 : Single;
+    m3  : Single;
+    m7  : Single;
+    m11 : Single;
+    m15 : Single;
   end;
 
   // Rectangle type
   PPRectangle = ^PRectangle;
   PRectangle = ^TRectangle;
   TRectangle = {$IFDEF WINDOWS}packed{$IFEND} record
-    x: Single;
-    y: Single;
-    width: Single;
-    height: Single;
+    x      : Single;
+    y      : Single;
+    width  : Single;
+    height : Single;
   end;
 
   // Image type, bpp always RGBA (32bit)
   // NOTE: Data stored in CPU memory (RAM)
   PImage = ^TImage;
   TImage = {$IFDEF WINDOWS}packed{$IFEND} record
-    data: Pointer;
-    width: Integer;
-    height: Integer;
-    mipmaps: Integer;
-    format: Integer;
+    data    : Pointer;
+    width   : Integer;
+    height  : Integer;
+    mipmaps : Integer;
+    format  : Integer;
   end;
 
   // Texture2D type
   // NOTE: Data stored in GPU memory
-  PTexture2D = ^TTexture2D;
-  TTexture2D = {$IFDEF WINDOWS}packed{$IFEND} record
-    id: Cardinal;
-    width: Integer;
-    height: Integer;
-    mipmaps: Integer;
-    format: Integer;
+  PTexture = ^TTexture;
+  TTexture = {$IFDEF WINDOWS}packed{$IFEND} record
+    id      : Cardinal;
+    width   : Integer;
+    height  : Integer;
+    mipmaps : Integer;
+    format  : Integer;
   end;
 
   // Texture type, same as Texture2D
-  PTexture = ^TTexture;
-  TTexture = TTexture2D;
+  //  UPDATE: these were swapped with actual declaration at some point
+  //  2D is now the deprecated naming
+  PTexture2D = ^TTexture2D;
+  TTexture2D = TTexture;
 
   PTextureCubemap = ^TTextureCubemap;
   TTextureCubemap = TTexture2D;
 
-  // RenderTexture2D type, for texture rendering
-  PRenderTexture2D = ^TRenderTexture2D;
-  TRenderTexture2D = {$IFDEF WINDOWS}packed{$IFEND} record
-    id : Cardinal;
-    texture : TTexture2D;
-    depth : TTexture2D;
-    depthTexture : Boolean;
+  // RenderTexture type, for texture rendering (Aliased later as ...2D)
+  PRenderTexture = ^TRenderTexture;
+  TRenderTexture = {$IFDEF WINDOWS}packed{$IFEND} record
+    id      : Cardinal;
+    texture : TTexture;
+    depth   : TTexture;
+  //  depthTexture : Boolean;       // Removed in current header
   end;
 
   // RenderTexture type, same as RenderTexture2D
-  PRenderTexture = ^TRenderTexture;
-  TRenderTexture = TRenderTexture2D;
+  PRenderTexture2D = ^TRenderTexture2D;  // maybe not to alias but to original? @TODO: determine after a test
+  TRenderTexture2D = TRenderTexture;
 
   // N-Patch layout info
   PNPatchInfo = ^TNPatchInfo;
   TNPatchInfo = {$IFDEF WINDOWS}packed{$IFEND} record
-    sourceRec : TRectangle;
-    left : Integer;
-    top : Integer;
-    right : Integer;
+    source : TRectangle;
+    left   : Integer;
+    top    : Integer;
+    right  : Integer;
     bottom : Integer;
-    &type : Integer;
+    layout : Integer;
   end;
 
 
@@ -277,11 +312,12 @@ type
   // Font type, includes texture and charSet array data
   PFont = ^TFont;
   TFont = {$IFDEF WINDOWS}packed{$IFEND} record
-    baseSize : Integer;
-    charsCount : Integer;
-    texture : TTexture2D;
-    recs : PRectangle;
-    chars : PCharInfo;
+    baseSize     : Integer;
+    charsCount   : Integer;
+    charsPadding : Integer;
+    texture      : TTexture2D;
+    recs         : PRectangle;
+    chars        : PCharInfo;
   end;
 
   // SpriteFont type fallback, defaults to Font
@@ -292,11 +328,11 @@ type
   // Camera type, defines a camera position/orientation in 3d space
   PCamera3D = ^TCamera3D;
   TCamera3D = {$IFDEF WINDOWS}packed{$IFEND} record
-    position : TVector3;
-    target : TVector3;
-    up : TVector3;
-    fovy : Single;
-    &type : Integer;
+    position   : TVector3;
+    target     : TVector3;
+    up         : TVector3;
+    fovy       : Single;
+    projection : Integer;
   end;
 
   PCamera = ^TCamera;
@@ -306,10 +342,10 @@ type
   // Camera2D type, defines a 2d camera
   PCamera2D = ^TCamera2D;
   TCamera2D = {$IFDEF WINDOWS}packed{$IFEND} record
-    offset: TVector2;
-    target: TVector2;
-    rotation: Single;
-    zoom: Single;
+    offset   : TVector2;
+    target   : TVector2;
+    rotation : Single;
+    zoom     : Single;
   end;
 
   // Vertex data definning a mesh
@@ -359,7 +395,7 @@ type
   TMaterial = {$IFDEF WINDOWS}packed{$IFEND} record
     shader : TShader;
     maps : ^TMaterialMap;
-    params : PSingle;
+    params : Array[0..3] of Single;
   end;
 
   // Transformation Properties
@@ -381,44 +417,44 @@ type
   // Model type
   PModel = ^TModel;
   TModel = {$IFDEF WINDOWS}packed{$IFEND} record
-    transform : TMatrix;
-    meshCount : Integer;
-    meshes : PMesh;
+    transform     : TMatrix;
 
+    meshCount     : Integer;
     materialCount : Integer;
-    materials : PMaterial;
-    meshMaterial : PInteger;
+    meshes        : PMesh;
+    materials     : PMaterial;
+    meshMaterial  : PInteger;
 
     // Animation data
     boneCount : Integer;
-    bones : PBoneInfo;
-    bindPose : PTransform;
+    bones     : PBoneInfo;
+    bindPose  : PTransform;
   end;
 
   // Model Animation
   PModelAnimation = ^TModelAnimation;
   TModelAnimation = {$IFDEF WINDOWS}packed{$IFEND} record
-    boneCount : Integer;
-    bones : PBoneInfo;
-
+    boneCount  : Integer;
     frameCount : Integer;
+
+    bones      : PBoneInfo;
     framePoses : PPTransform;
   end;
 
   // Ray type (useful for raycast)
   PRay = ^TRay;
   TRay = {$IFDEF WINDOWS}packed{$IFEND} record
-    position : TVector3;
+    position  : TVector3;
     direction : TVector3;
   end;
 
   // Raycast hit information
   PRayHitInfo = ^TRayHitInfo;
   TRayHitInfo = {$IFDEF WINDOWS}packed{$IFEND} record
-    hit : Boolean;
+    hit      : Boolean;
     distance : Single;
     position : TVector3;
-    normal : TVector3;
+    normal   : TVector3;
   end;
 
   // Bounding box type
@@ -431,11 +467,11 @@ type
 // Wave type, defines audio wave data
   PWave = ^TWave;
   TWave = {$IFDEF WINDOWS}packed{$IFEND} record
-    sampleCount : dword;
-    sampleRate : dword;
-    sampleSize : dword;
-    channels : dword;
-    data : Pointer;
+    sampleCount : Cardinal;
+    sampleRate  : Cardinal;
+    sampleSize  : Cardinal;
+    channels    : Cardinal;
+    data        : Pointer;
   end;
 
   PrAudioBuffer = ^TrAudioBuffer;
@@ -446,56 +482,79 @@ type
   // NOTE: Useful to create custom audio streams not bound to a specific file
   PAudioStream = ^TAudioStream;
   TAudioStream = {$IFDEF WINDOWS}packed{$IFEND} record
-    sampleRate: dword;
-    sampleSize: dword;
-    channels: dword;
-    buffer : PrAudioBuffer;
+    buffer     : PrAudioBuffer;
+
+    sampleRate : Cardinal;
+    sampleSize : Cardinal;
+    channels   : Cardinal;
   end;
 
   // Sound source type
   PSound = ^TSound;
   TSound = {$IFDEF WINDOWS}packed{$IFEND} record
-    sampleCount : dword;
-    stream : TAudioStream
+    stream      : TAudioStream;
+    sampleCount : Cardinal;
   end;
 
   // Music type (file streaming from memory)
   // NOTE: Anything longer than ~10 seconds should be streamed
-  TMusic = record
-    ctxType : longint;
-    ctxData : Pointer;
-    sampleCount : dword;
-    looping : boolean;
-    stream : TAudioStream;
+  TMusic = {$IFDEF WINDOWS}packed{$IFEND} record
+    stream      : TAudioStream;
+    sampleCount : Cardinal;
+    looping     : Boolean;
+
+    ctxType     : Integer;
+    ctxData     : Pointer;
   end;
 
   // Head-Mounted-Display device parameters
   PVrDeviceInfo = ^TVrDeviceInfo;
   TVrDeviceInfo = {$IFDEF WINDOWS}packed{$IFEND} record
-    hResolution: Integer;
-    vResolution: Integer;
-    hScreenSize: Single;
-    vScreenSize: Single;
-    vScreenCenter: Single;
-    eyeToScreenDistance: Single;
-    lensSeparationDistance: Single;
-    interpupillaryDistance: Single;
-    lensDistortionValues: Array[0..3] of Single;
-    chromaAbCorrection: Array[0..3] of Single;
+    hResolution            : Integer;
+    vResolution            : Integer;
+    hScreenSize            : Single;
+    vScreenSize            : Single;
+    vScreenCenter          : Single;
+    eyeToScreenDistance    : Single;
+    lensSeparationDistance : Single;
+    interpupillaryDistance : Single;
+    lensDistortionValues   : Array[0..3] of Single;
+    chromaAbCorrection     : Array[0..3] of Single;
+  end;
+
+  PVrStereoConfig = ^TVrStereoConfig;
+  TVrStereoConfig = {$IFDEF WINDOWS}packed{$IFEND} record
+    projection        : Array[0..1] of TMatrix;
+    viewOffset        : Array[0..1] of TMatrix;
+    leftLensCenter    : Array[0..1] of Single;
+    rightLensCenter   : Array[0..1] of Single;
+    leftScreenCenter  : Array[0..1] of Single;
+    rightScreenCenter : Array[0..1] of Single;
+    scale             : Array[0..1] of Single;
+    scaleIn           : Array[0..1] of Single;
   end;
 
 const
 
+{%region 'enum ConfigFlags'}
   // raylib Config Flags
-  FLAG_RESERVED =   1;
-  FLAG_FULLSCREEN_MODE     =   2;
-  FLAG_WINDOW_RESIZABLE    =   4;
-  FLAG_WINDOW_UNDECORATED  =   8;
-  FLAG_WINDOW_TRANSPARENT  =  16;
-  FLAG_WINDOW_HIDDEN       = 128;
-  FLAG_MSAA_4X_HINT        =  32;
-  FLAG_VSYNC_HINT          =  64;
+  FLAG_VSYNC_HINT         = $00000040;
+  FLAG_FULLSCREEN_MODE    = $00000002;
+  FLAG_WINDOW_RESIZABLE   = $00000004;
+  FLAG_WINDOW_UNDECORATED = $00000008;
+  FLAG_WINDOW_HIDDEN      = $00000080;
+  FLAG_WINDOW_MINIMIZED   = $00000200;
+  FLAG_WINDOW_MAXIMIZED   = $00000400;
+  FLAG_WINDOW_UNFOCUSED   = $00000800;
+  FLAG_WINDOW_TOPMOST     = $00001000;
+  FLAG_WINDOW_ALWAYS_RUN  = $00000100;
+  FLAG_WINDOW_TRANSPARENT = $00000010;
+  FLAG_WINDOW_HIGHDPI     = $00002000;
+  FLAG_MSAA_4X_HINT       = $00000020;
+  FLAG_INTERLACED_HINT    = $00010000;
+{%endregion}
 
+{%region 'enum TraceLogLevel'}
   // Trace log type
   LOG_ALL     = 0;
   LOG_TRACE   = 1;
@@ -505,9 +564,12 @@ const
   LOG_ERROR   = 6;
   LOG_FATAL   = 7;
   LOG_NONE    = 8;
+{%endregion}
 
+{%region 'enum KeyboardKey'}
   // Keyboard Function Keys
   // Alphanumeric keys
+  KEY_NULL            =  0;
   KEY_APOSTROPHE      = 39;
   KEY_COMMA           = 44;
   KEY_MINUS           = 45;
@@ -553,7 +615,7 @@ const
   KEY_Z               = 90;
 
   // Function keys
-  KEY_SPACE           = 32;
+  KEY_SPACE           =  32;
   KEY_ESCAPE          = 256;
   KEY_ENTER           = 257;
   KEY_TAB             = 258;
@@ -594,10 +656,10 @@ const
   KEY_RIGHT_ALT       = 346;
   KEY_RIGHT_SUPER     = 347;
   KEY_KB_MENU         = 348;
-  KEY_LEFT_BRACKET    = 91;
-  KEY_BACKSLASH       = 92;
-  KEY_RIGHT_BRACKET   = 93;
-  KEY_GRAVE           = 96;
+  KEY_LEFT_BRACKET    =  91;
+  KEY_BACKSLASH       =  92;
+  KEY_RIGHT_BRACKET   =  93;
+  KEY_GRAVE           =  96;
 
   // Keypad keys
   KEY_KP_0            = 320;
@@ -623,20 +685,49 @@ const
   KEY_MENU           = 82;
   KEY_VOLUME_UP      = 24;
   KEY_VOLUME_DOWN    = 25;
+{%endregion 'enum KeyboardKey'}
 
-  // Mouse Buttons
-  MOUSE_LEFT_BUTTON   = 0;
-  MOUSE_RIGHT_BUTTON  = 1;
-  MOUSE_MIDDLE_BUTTON = 2;
+{%region 'enum MouseButton'}
 
-  // Gamepad Number
-  GAMEPAD_PLAYER1     = 0;
-  GAMEPAD_PLAYER2     = 1;
-  GAMEPAD_PLAYER3     = 2;
-  GAMEPAD_PLAYER4     = 3;
+// Mouse Buttons
+MOUSE_LEFT_BUTTON   = 0;   // legacy
+MOUSE_RIGHT_BUTTON  = 1;   // legacy
+MOUSE_MIDDLE_BUTTON = 2;   // legacy
 
-  // Gamepad Buttons/Axis
-  
+  MOUSE_BUTTON_LEFT    = 0;
+  MOUSE_BUTTON_RIGHT   = 1;
+  MOUSE_BUTTON_MIDDLE  = 2;
+  MOUSE_BUTTON_SIDE    = 3;
+  MOUSE_BUTTON_EXTRA   = 4;
+  MOUSE_BUTTON_FORWARD = 5;
+  MOUSE_BUTTON_BACK    = 6;
+  MOUSE_BUTTON_MAX     = 7;
+{%endregion}
+
+{%region 'enum MouseCursor'}
+  MOUSE_CURSOR_DEFAULT       =  0;
+  MOUSE_CURSOR_ARROW         =  1;
+  MOUSE_CURSOR_IBEAM         =  2;
+  MOUSE_CURSOR_CROSSHAIR     =  3;
+  MOUSE_CURSOR_POINTING_HAND =  4;
+  MOUSE_CURSOR_RESIZE_EW     =  5;     // The horizontal resize/move arrow shape
+  MOUSE_CURSOR_RESIZE_NS     =  6;     // The vertical resize/move arrow shape
+  MOUSE_CURSOR_RESIZE_NWSE   =  7;     // The top-left to bottom-right diagonal resize/move arrow shape
+  MOUSE_CURSOR_RESIZE_NESW   =  8;     // The top-right to bottom-left diagonal resize/move arrow shape
+  MOUSE_CURSOR_RESIZE_ALL    =  9;     // The omni-directional resize/move cursor shape
+  MOUSE_CURSOR_NOT_ALLOWED   = 10;     // The operation-not-allowed shape
+  {%endregion}
+
+{%region 'enum GamepadButton'}
+
+//**** Removed from raylib.h (we might need to bring it back?)
+// Gamepad Number
+//GAMEPAD_PLAYER1     = 0;
+//GAMEPAD_PLAYER2     = 1;
+//GAMEPAD_PLAYER3     = 2;
+//GAMEPAD_PLAYER4     = 3;
+
+
   // This is here just for error checking
   GAMEPAD_BUTTON_UNKNOWN          = 0;
 
@@ -667,136 +758,165 @@ const
   // These are the joystick press in buttons
   GAMEPAD_BUTTON_LEFT_THUMB       = 16;
   GAMEPAD_BUTTON_RIGHT_THUMB      = 17;
+{%endregion}
 
-
-
+{%region 'enum GamepadAxis'}
   // This is here just for error checking
-  GAMEPAD_AXIS_UNKNOWN = 0;
+  //GAMEPAD_AXIS_UNKNOWN = 0;  // Removed?
 
   // Left stick
-  GAMEPAD_AXIS_LEFT_X  = 1;
-  GAMEPAD_AXIS_LEFT_Y  = 2;
+  GAMEPAD_AXIS_LEFT_X  = 0;
+  GAMEPAD_AXIS_LEFT_Y  = 1;
 
   // Right stick
-  GAMEPAD_AXIS_RIGHT_X = 3;
-  GAMEPAD_AXIS_RIGHT_Y = 4;
+  GAMEPAD_AXIS_RIGHT_X = 2;
+  GAMEPAD_AXIS_RIGHT_Y = 3;
 
   // Pressure levels for the back triggers
   GAMEPAD_AXIS_LEFT_TRIGGER = 5;      // [1..-1] (pressure-level)
   GAMEPAD_AXIS_RIGHT_TRIGGER = 6;     // [1..-1] (pressure-level)
+{%endregion}
 
+{%region 'enum MaterialMapIndex'}
+  MATERIAL_MAP_ALBEDO     =  0;       // MATERIAL_MAP_DIFFUSE
+  MATERIAL_MAP_METALNESS  =  1;       // MATERIAL_MAP_SPECULAR
+  MATERIAL_MAP_NORMAL     =  2;
+  MATERIAL_MAP_ROUGHNESS  =  3;
+  MATERIAL_MAP_OCCLUSION  =  4;
+  MATERIAL_MAP_EMISSION   =  5;
+  MATERIAL_MAP_HEIGHT     =  6;
+  MATERIAL_MAP_BRDG       =  7;
+  MATERIAL_MAP_CUBEMAP    =  8;             // NOTE: Uses GL_TEXTURE_CUBE_MAP
+  MATERIAL_MAP_IRRADIANCE =  9;          // NOTE: Uses GL_TEXTURE_CUBE_MAP
+  MATERIAL_MAP_PREFILTER  = 10;          // NOTE: Uses GL_TEXTURE_CUBE_MAP
+
+  // Deprecated Enums/Constants for old shader mats
+  MATERIAL_MAP_DIFFUSE    = MATERIAL_MAP_ALBEDO;
+  MATERIAL_MAP_SPECULAR   = MATERIAL_MAP_METALNESS;
+{%endregion}
+
+{%region 'enum ShaderLocationIndex'}
   // Shader location point type
-  LOC_VERTEX_POSITION    = 0;
-  LOC_VERTEX_TEXCOORD01  = 1;
-  LOC_VERTEX_TEXCOORD02  = 2;
-  LOC_VERTEX_NORMAL      = 3;
-  LOC_VERTEX_TANGENT     = 4;
-  LOC_VERTEX_COLOR       = 5;
-  LOC_MATRIX_MVP         = 6;
-  LOC_MATRIX_MODEL       = 7;
-  LOC_MATRIX_VIEW        = 8;
-  LOC_MATRIX_PROJECTION  = 9;
-  LOC_VECTOR_VIEW        = 10;
-  LOC_COLOR_DIFFUSE      = 11;
-  LOC_COLOR_SPECULAR     = 12;
-  LOC_COLOR_AMBIENT      = 13;
-  LOC_MAP_ALBEDO         = 14;
-  LOC_MAP_METALNESS      = 15;
-  LOC_MAP_NORMAL         = 16;
-  LOC_MAP_ROUGHNESS      = 17;
-  LOC_MAP_OCCLUSION      = 18;
-  LOC_MAP_EMISSION       = 19;
-  LOC_MAP_HEIGHT         = 20;
-  LOC_MAP_CUBEMAP        = 21;
-  LOC_MAP_IRRADIANCE     = 22;
-  LOC_MAP_PREFILTER      = 23;
-  LOC_MAP_BRDF           = 24;
+  SHADER_LOC_VERTEX_POSITION    = 0;
+  SHADER_LOC_VERTEX_TEXCOORD01  = 1;
+  SHADER_LOC_VERTEX_TEXCOORD02  = 2;
+  SHADER_LOC_VERTEX_NORMAL      = 3;
+  SHADER_LOC_VERTEX_TANGENT     = 4;
+  SHADER_LOC_VERTEX_COLOR       = 5;
 
-  LOC_MAP_DIFFUSE  = LOC_MAP_ALBEDO;
-  LOC_MAP_SPECULAR = LOC_MAP_METALNESS;
+  SHADER_LOC_MATRIX_MVP         = 6;
+  SHADER_LOC_MATRIX_VIEW        = 7;
+  SHADER_LOC_MATRIX_PROJECTION  = 8;
+  SHADER_LOC_MATRIX_MODEL       = 9;
+  SHADER_LOC_MATRIX_NORMAL      = 10;
 
-  UNIFORM_FLOAT = 0;
-  UNIFORM_VEC2  = 1;
-  UNIFORM_VEC3  = 2;
-  UNIFORM_VEC4  = 3;
-  UNIFORM_INT   = 4;
-  UNIFORM_IVEC2 = 5;
-  UNIFORM_IVEC3 = 6;
-  UNIFORM_IVEC4 = 7;
-  UNIFORM_SAMPLER2D = 8;
+  SHADER_LOC_VECTOR_VIEW        = 11;
+  SHADER_LOC_COLOR_DIFFUSE      = 12;
+  SHADER_LOC_COLOR_SPECULAR     = 13;
+  SHADER_LOC_COLOR_AMBIENT      = 14;
 
-  // Material map type
-  MAP_ALBEDO     = 0;
-  MAP_METALNESS  = 1;
-  MAP_NORMAL     = 2;
-  MAP_ROUGHNESS  = 3;
-  MAP_OCCLUSION  = 4;
-  MAP_EMISSION   = 5;
-  MAP_HEIGHT     = 6;
-  MAP_CUBEMAP    = 7;
-  MAP_IRRADIANCE = 8;
-  MAP_PREFILTER  = 9;
-  MAP_BRDF       = 10;
-  MAP_DIFFUSE    = MAP_ALBEDO;
-  MAP_SPECULAR   = MAP_METALNESS;
+  SHADER_LOC_MAP_ALBEDO         = 15;
+  SHADER_LOC_MAP_METALNESS      = 16;
+  SHADER_LOC_MAP_NORMAL         = 17;
+  SHADER_LOC_MAP_ROUGHNESS      = 18;
+  SHADER_LOC_MAP_OCCLUSION      = 19;
+  SHADER_LOC_MAP_EMISSION       = 20;
+  SHADER_LOC_MAP_HEIGHT         = 21;
+  SHADER_LOC_MAP_CUBEMAP        = 22;
+  SHADER_LOC_MAP_IRRADIANCE     = 23;
+  SHADER_LOC_MAP_PREFILTER      = 24;
+  SHADER_LOC_MAP_BRDF           = 25;
 
+  SHADER_LOC_MAP_DIFFUSE  = SHADER_LOC_MAP_ALBEDO;
+  SHADER_LOC_MAP_SPECULAR = SHADER_LOC_MAP_METALNESS;
+
+{%endregion}
+
+{%region 'enum ShaderUniformDataType'}
+  SHADER_UNIFORM_FLOAT = 0;
+  SHADER_UNIFORM_VEC2  = 1;
+  SHADER_UNIFORM_VEC3  = 2;
+  SHADER_UNIFORM_VEC4  = 3;
+  SHADER_UNIFORM_INT   = 4;
+  SHADER_UNIFORM_IVEC2 = 5;
+  SHADER_UNIFORM_IVEC3 = 6;
+  SHADER_UNIFORM_IVEC4 = 7;
+  SHADER_UNIFORM_SAMPLER2D = 8;
+{%endregion}
+
+{%region 'enum PixelFormat'}
   // Pixel formats
   // NOTE: Support depends on OpenGL version and platform
-  UNCOMPRESSED_GRAYSCALE    = 1;
-  UNCOMPRESSED_GRAY_ALPHA   = 2;
-  UNCOMPRESSED_R5G6B5       = 3;
-  UNCOMPRESSED_R8G8B8       = 4;
-  UNCOMPRESSED_R5G5B5A1     = 5;
-  UNCOMPRESSED_R4G4B4A4     = 6;
-  UNCOMPRESSED_R8G8B8A8     = 7;
-  UNCOMPRESSED_R32          = 8;
-  UNCOMPRESSED_R32G32B32    = 9;
-  UNCOMPRESSED_R32G32B32A32 = 10;
-  COMPRESSED_DXT1_RGB       = 11;
-  COMPRESSED_DXT1_RGBA      = 12;
-  COMPRESSED_DXT3_RGBA      = 13;
-  COMPRESSED_DXT5_RGBA      = 14;
-  COMPRESSED_ETC1_RGB       = 15;
-  COMPRESSED_ETC2_RGB       = 16;
-  COMPRESSED_ETC2_EAC_RGBA  = 17;
-  COMPRESSED_PVRT_RGB       = 18;
-  COMPRESSED_PVRT_RGBA      = 19;
-  COMPRESSED_ASTC_4x4_RGBA  = 20;
-  COMPRESSED_ASTC_8x8_RGBA  = 21;
+  PIXELFORMAT_UNCOMPRESSED_GRAYSCALE    = 1;
+  PIXELFORMAT_UNCOMPRESSED_GRAY_ALPHA   = 2;
+  PIXELFORMAT_UNCOMPRESSED_R5G6B5       = 3;
+  PIXELFORMAT_UNCOMPRESSED_R8G8B8       = 4;
+  PIXELFORMAT_UNCOMPRESSED_R5G5B5A1     = 5;
+  PIXELFORMAT_UNCOMPRESSED_R4G4B4A4     = 6;
+  PIXELFORMAT_UNCOMPRESSED_R8G8B8A8     = 7;
+  PIXELFORMAT_UNCOMPRESSED_R32          = 8;
+  PIXELFORMAT_UNCOMPRESSED_R32G32B32    = 9;
+  PIXELFORMAT_UNCOMPRESSED_R32G32B32A32 = 10;
+  PIXELFORMAT_COMPRESSED_DXT1_RGB       = 11;
+  PIXELFORMAT_COMPRESSED_DXT1_RGBA      = 12;
+  PIXELFORMAT_COMPRESSED_DXT3_RGBA      = 13;
+  PIXELFORMAT_COMPRESSED_DXT5_RGBA      = 14;
+  PIXELFORMAT_COMPRESSED_ETC1_RGB       = 15;
+  PIXELFORMAT_COMPRESSED_ETC2_RGB       = 16;
+  PIXELFORMAT_COMPRESSED_ETC2_EAC_RGBA  = 17;
+  PIXELFORMAT_COMPRESSED_PVRT_RGB       = 18;
+  PIXELFORMAT_COMPRESSED_PVRT_RGBA      = 19;
+  PIXELFORMAT_COMPRESSED_ASTC_4x4_RGBA  = 20;
+  PIXELFORMAT_COMPRESSED_ASTC_8x8_RGBA  = 21;
+{%endregion}
 
+{%region 'enum TextureFilter'}
   // Texture parameters: filter mode
   // NOTE 1: Filtering considers mipmaps if available in the texture
   // NOTE 2: Filter is accordingly set for minification and magnification
-  FILTER_POINT           = 0;
-  FILTER_BILINEAR        = 1;
-  FILTER_TRILINEAR       = 2;
-  FILTER_ANISOTROPIC_4X  = 3;
-  FILTER_ANISOTROPIC_8X  = 4;
-  FILTER_ANISOTROPIC_16X = 5;
+  TEXTURE_FILTER_POINT           = 0;
+  TEXTURE_FILTER_BILINEAR        = 1;
+  TEXTURE_FILTER_TRILINEAR       = 2;
+  TEXTURE_FILTER_ANISOTROPIC_4X  = 3;
+  TEXTURE_FILTER_ANISOTROPIC_8X  = 4;
+  TEXTURE_FILTER_ANISOTROPIC_16X = 5;
+{%endregion}
 
-  // Cubemap layout type
-  CUBEMAP_AUTO_DETECT         = 0;            // Automatically detect layout type
-  CUBEMAP_LINE_VERTICAL       = 1;          // Layout is defined by a vertical line with faces
-  CUBEMAP_LINE_HORIZONTAL     = 2;        // Layout is defined by an horizontal line with faces
-  CUBEMAP_CROSS_THREE_BY_FOUR = 3;    // Layout is defined by a 3x4 cross with cubemap faces
-  CUBEMAP_CROSS_FOUR_BY_THREE = 4;    // Layout is defined by a 4x3 cross with cubemap faces
-  CUBEMAP_PANORAMA            = 5;               // Layout is defined by a panorama image (equirectangular map)
-
+{%region 'enum TextureWrap'}
   // Texture parameters: wrap mode
-  WRAP_REPEAT = 0;
-  WRAP_CLAMP  = 1;
-  WRAP_MIRROR_REPEAT = 2;
-  WRAP_MIRROR_CLAMP = 3;
+  TEXTURE_WRAP_REPEAT        = 0;
+  TEXTURE_WRAP_CLAMP         = 1;
+  TEXTURE_WRAP_MIRROR_REPEAT = 2;
+  TEXTURE_WRAP_MIRROR_CLAMP  = 3;
+{%endregion}
 
+{%region 'enum CubemapLayout'}
+  // Cubemap layout type
+  CUBEMAP_LAYOUT_AUTO_DETECT         = 0;        // Automatically detect layout type
+  CUBEMAP_LAYOUT_LINE_VERTICAL       = 1;        // Layout is defined by a vertical line with faces
+  CUBEMAP_LAYOUT_LINE_HORIZONTAL     = 2;        // Layout is defined by an horizontal line with faces
+  CUBEMAP_LAYOUT_CROSS_THREE_BY_FOUR = 3;        // Layout is defined by a 3x4 cross with cubemap faces
+  CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE = 4;        // Layout is defined by a 4x3 cross with cubemap faces
+  CUBEMAP_LAYOUT_PANORAMA            = 5;        // Layout is defined by a panorama image (equirectangular map)
+{%endregion}
+
+{%region 'enum FontType'}
   FONT_DEFAULT = 0;
   FONT_BITMAP  = 1;
   FONT_SDF     = 2;
+{%endregion}
 
+{%region 'enum BlendMode'}
   // Color blending modes (pre-defined)
-  BLEND_ALPHA      = 0;
-  BLEND_ADDITIVE   = 1;
-  BLEND_MULTIPLIED = 2;
+  BLEND_ALPHA           = 0;
+  BLEND_ADDITIVE        = 1;
+  BLEND_MULTIPLIED      = 2;
+  BLEND_ADD_COLORS      = 3;
+  BLEND_SUBTRACT_COLORS = 4;
+  BLEND_CUSTOM          = 5;
+{%endregion}
 
+{%region 'enum Gestures'}
   // Gestures type
   // NOTE: It could be used as flags to enable only some gestures
   GESTURE_NONE        = 0;
@@ -810,38 +930,71 @@ const
   GESTURE_SWIPE_DOWN  = 128;
   GESTURE_PINCH_IN    = 256;
   GESTURE_PINCH_OUT   = 512;
+{%endregion}
 
+{%region 'enum CamerMode'}
   // Camera system modes
   CAMERA_CUSTOM       = 0;
   CAMERA_FREE         = 1;
   CAMERA_ORBITAL      = 2;
   CAMERA_FIRST_PERSON = 3;
   CAMERA_THIRD_PERSON = 4;
+{%endregion}
 
+{%region 'enum CameraProjection'}
   // Camera projection modes
   CAMERA_PERSPECTIVE   = 0;
   CAMERA_ORTHOGRAPHIC  = 1;
+{%endregion}
 
+{%region 'enum NPatchLayout'}
   // Type of n-patch
-  NPT_9PATCH            = 0;
-  NPT_3PATCH_VERTICAL   = 1;
-  NPT_3PATCH_HORIZONTAL = 2;
+  NPATCH_NINE_PATCH             = 0;
+  NPATCH_THREE_PATCH_VERTICAL   = 1;
+  NPATCH_THREE_PATCH_HORIZONTAL = 2;
+{%endregion}
+
+{%region 'Internal Callback Pointer Types'}
+// Callbacks to hook some internal functions
+// WARNING: This callbacks are intended for advance users
 
 type
-  TTraceLogCallback = procedure(aLogType : Integer; aText, aArgs : PAnsiChar); cdecl;
+  TTraceLogCallback     = procedure(aLogType : Integer; aText, aArgs : PAnsiChar); cdecl;
+  //PLoadFileDataCallback = ^TLoadFileDataCallback;
+  TLoadFileDataCallback = function(aFileName : PChar; aBytesRead : PCardinal) : PByte; cdecl;
+  TSaveFileDataCallback = function(aFileName : PChar; aData : Pointer; aBytesToWrite : Cardinal) : Boolean; cdecl;
+
+  // A type for a function or procedure should inherently a pointer
+  // rendering the following commented line, a point to a function pointer,
+  //   essentially a  CB** in C (or more easily, a list/array of callbacks)
+  // @LOOKOUT: Look to see if there are callback** in the following functions.
+  //           if so, we will need this type declared (but I would err' on
+  //           PT...Callback or PP...Callback)
+  //PLoadFileTextCallback = ^TLoadFileTextCallback;
+  TLoadFileTextCallback = function(aFileName : PChar) : PChar; cdecl;
+  TSaveFileTextCallback = function(aFileName : PChar; aText : PChar) : PChar; cdecl;
+{%endregion}
+
+{%region 'Window Functions'}
 
 // Window-related functions
-procedure InitWindow(aWidth: Integer; aHeight: Integer; aTitle: PAnsiChar); cdecl; external cDllName;
-function  WindowShouldClose(): Boolean; cdecl; external cDllName;
+procedure InitWindow(aWidth : Integer; aHeight : Integer; aTitle : PAnsiChar); cdecl; external cDllName;
+function  WindowShouldClose() : Boolean; cdecl; external cDllName;
 procedure CloseWindow(); cdecl; external cDllName;
-function  IsWindowReady(): Boolean; cdecl; external cDllName;
-function  IsWindowMinimized(): Boolean; cdecl; external cDllName;
-function  IsWindowResized(): Boolean; cdecl; external cDllName;
-function  IsWindowHidden(): Boolean; cdecl; external cDllName;
-function  IsWindowFullscreen():Boolean; cdecl; external cDllName;
+function  IsWindowReady() : Boolean; cdecl; external cDllName;
+function  IsWindowFullscreen() : Boolean; cdecl; external cDllName;
+function  IsWindowHidden() : Boolean; cdecl; external cDllName;
+function  IsWindowMinimized() : Boolean; cdecl; external cDllName;
+function  IsWindowMaximized() : Boolean; cdecl; external cDllName;
+function  IsWindowFocused() : Boolean; cdecl; external cDllName;
+function  IsWindowResized() : Boolean; cdecl; external cDllName;
+function  IsWindowState(aFlag : Cardinal) : Boolean; cdecl; external cDllName;
+procedure SetWindowState(aFlag : Cardinal); cdecl; external cDllName;
+procedure ClearWindowState(aFlag : Cardinal); cdecl; external cDllName;
 procedure ToggleFullscreen(); cdecl; external cDllName;
-procedure UnhideWindow(); cdecl; external cDllName;
-procedure HideWindow(); cdecl; external cDllName;
+procedure MaximizeWindow(); cdecl; external cDllName;
+procedure MinimizeWindow(); cdecl; external cDllName;
+procedure RestoreWindow(); cdecl; external cDllName;
 procedure SetWindowIcon(aImage: TImage); cdecl; external cDllName;
 procedure SetWindowTitle(aTitle: PAnsiChar); cdecl; external cDllName;
 procedure SetWindowPosition(aX: Integer; aY: Integer); cdecl; external cDllName;
@@ -852,23 +1005,43 @@ function  GetWindowHandle(): Pointer; cdecl; external cDllName;
 function  GetScreenWidth(): Integer; cdecl; external cDllName;
 function  GetScreenHeight(): Integer; cdecl; external cDllName;
 function  GetMonitorCount(): Integer; cdecl; external cDllName;
+function  GetCurrentMonitor(): Integer; cdecl; external cDllName;
+function  GetMonitorPosition(aMonitor : Integer) : TVector2; cdecl; external cDllName;
 function  GetMonitorWidth(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetMonitorHeight(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetMonitorPhysicalWidth(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetMonitorPhysicalHeight(aMonitor : Integer): Integer; cdecl; external cDllName;
+function  GetMonitorRefreshRate(aMonitor : Integer): Integer; cdecl; external cDllName;
 function  GetWindowPosition(): TVector2; cdecl; external cDllName; // Get window position XY on monitor
+function  GetWindowScaleDPI(): TVector2; cdecl; external cDllName;
 function  GetMonitorName(aMonitor : Integer): PAnsiChar; cdecl; external cDllName;
+
+// Gone
+//procedure UnhideWindow(); cdecl; external cDllName;
+//procedure HideWindow(); cdecl; external cDllName;
+
+{%endregion}
+
+{%region 'Clipboard Functions'}
+
 function  GetClipboardText(): PAnsiChar; cdecl; external cDllName;
 procedure SetClipboardText(aText : PAnsiChar); cdecl; external cDllName;
 
-// Cursor-related functions
+{%endregion}
+
+{%region 'Cursor Functions'}
+
 procedure ShowCursor(); cdecl; external cDllName;
 procedure HideCursor(); cdecl; external cDllName;
 function  IsCursorHidden(): Boolean; cdecl; external cDllName;
 procedure EnableCursor(); cdecl; external cDllName;
 procedure DisableCursor(); cdecl; external cDllName;
+function  IsCursorOnScreen() : Boolean; cdecl; external cDllName;
 
-// Drawing-related functions
+{%endregion}
+
+{%region 'Drawing Functions'}
+
 procedure ClearBackground(aColor: TColor); cdecl; external cDllName;
 procedure BeginDrawing(); cdecl; external cDllName;
 procedure EndDrawing(); cdecl; external cDllName;
@@ -876,18 +1049,54 @@ procedure BeginMode2D(aCamera: TCamera2D); cdecl; external cDllName;
 procedure EndMode2D(); cdecl; external cDllName;
 procedure BeginMode3D(aCamera: TCamera3D); cdecl; external cDllName;
 procedure EndMode3D(); cdecl; external cDllName;
-procedure BeginTextureMode(aTarget: TRenderTexture2D); cdecl; external cDllName;
+procedure BeginTextureMode(aTarget: TRenderTexture); cdecl; external cDllName;
 procedure EndTextureMode(); cdecl; external cDllName;
+procedure BeginShaderMode(aShader : TShader); cdecl; external cDllName;
+procedure EndShaderMode(); cdecl; external cDllName;
+procedure BeginBlendMode(aMode : Integer); cdecl; external cDllName;
+procedure EndBlendMode(); cdecl; external cDllName;
 procedure BeginScissorMode(aX, aY, aWidth, aHeight : Integer); cdecl; external cDllName;
 procedure EndScissorMode(); cdecl; external cDllName;
+procedure BeginVrStereoMode(aConfig : TVrStereoConfig); cdecl; external cDllName;
+procedure EndVrStereoMode(); cdecl; external cDllName;
+
+{%endregion}
+
+{%region 'VR Configuration Functions'}
+
+// VR stereo config functions for VR simulator
+function  LoadVrStereoConfig(aDevice : TVrDeviceInfo) : TVrStereoConfig; cdecl; external cDllName;     // Load VR stereo config for VR simulator device parameters
+procedure UnloadVrStereoConfig(aConfig : TVrStereoConfig); cdecl; external cDllName;           // Unload VR stereo config
+
+{%endregion}
+
+{%region 'Shader Management Functions'}
+
+// Shader management functions
+// NOTE: Shader functionality is not available on OpenGL 1.1
+function  LoadShader(aVsFileName, aFsFileName : PChar) : TShader; cdecl; external cDllName;   // Load shader from files and bind default locations
+function  LoadShaderFromMemory(aVsCode, aFsCode : PChar) : TShader; cdecl; external cDllName; // Load shader from code strings and bind default locations
+function  GetShaderLocation(aShader : TShader; aUuniformName : PChar) : Integer; cdecl; external cDllName;       // Get shader uniform location
+function  GetShaderLocationAttrib(aShader : TShader; aAttribName : PChar) : Integer; cdecl; external cDllName;  // Get shader attribute location
+procedure SetShaderValue(shader : TShader; aLocIndex : Integer; aValue : Pointer; aUniformType : Integer); cdecl; external cDllName;               // Set shader uniform value
+procedure SetShaderValueV(shader : TShader; aLocIndex : Integer; aValue : Pointer; aUniformType, aCount : Integer); cdecl; external cDllName;   // Set shader uniform value vector
+procedure SetShaderValueMatrix(aShader : TShader; aLocIndex : Integer; aMat : TMatrix); cdecl; external cDllName;         // Set shader uniform value (matrix 4x4)
+procedure SetShaderValueTexture(aShader : TShader; aLocIndex : Integer; aTexture : TTexture); cdecl; external cDllName; // Set shader uniform value for texture (sampler2d)
+procedure UnloadShader(aShader : TShader); cdecl; external cDllName;                                    // Unload shader from GPU memory (VRAM)
+
+{%endregion}
+
+{%region 'Screen Space Functions'}
 
 // Screen-space-related functions
-function  GetMouseRay(aMousePosition: TVector2; aCamera: TCamera): TRay; cdecl; external cDllName;
-function  GetCameraMatrix(aCamera : TCamera): TMatrix; cdecl; external cDllName;
-function  GetCameraMatrix2D(aCamera : TCamera2D): TMatrix; cdecl; external cDllName;
-function  GetWorldToScreen(aPosition: TVector3; aCamera: TCamera): TVector2; cdecl; external cDllName;
-function  GetWorldToScreen2D(aPosition : TVector2; aCamera : TCamera2D): TVector2; cdecl; external cDllName;
-function  GetScreenToWorld2D(aPosition : TVector2; aCamera : TCamera2D): TVector2; cdecl; external cDllName;
+function  GetMouseRay(aMousePosition: TVector2; aCamera: TCamera) : TRay; cdecl; external cDllName;
+function  GetCameraMatrix(aCamera : TCamera) : TMatrix; cdecl; external cDllName;
+function  GetCameraMatrix2D(aCamera : TCamera2D) : TMatrix; cdecl; external cDllName;
+function  GetWorldToScreen(aPosition: TVector3; aCamera: TCamera) : TVector2; cdecl; external cDllName;
+function  GetWorldToScreenEx(aPosition : TVector3; aCamera : TCamera; aWidth, aHeight : Integer) : TVector2; cdecl; external cDllName;
+function  GetWorldToScreen2D(aPosition : TVector2; aCamera : TCamera2D) : TVector2; cdecl; external cDllName;
+function  GetScreenToWorld2D(aPosition : TVector2; aCamera : TCamera2D) : TVector2; cdecl; external cDllName;
+{%endregion}
 
 // Timming-related functions
 procedure SetTargetFPS(aFPS: Integer); cdecl; external cDllName;
@@ -1312,9 +1521,8 @@ function GetCollisionRayGround(aRay: TRay; aGroundHeight: Single): TRayHitInfo; 
 //------------------------------------------------------------------------------------
 
 // TShader loading/unloading functions
-function  LoadShader(avsFileName: PAnsiChar; afsFileName: PAnsiChar): TShader; cdecl; external cDllName;
-function  LoadShaderCode(avsCode: PAnsiChar; afsCode: PAnsiChar): TShader; cdecl; external cDllName;
-procedure UnloadShader(aShader: TShader); cdecl; external cDllName;
+// I think this may have been removed
+//function  LoadShaderCode(avsCode: PAnsiChar; afsCode: PAnsiChar): TShader; cdecl; external cDllName;
 
 function  GetShaderDefault(): TShader; cdecl; external cDllName;
 function  GetTextureDefault(): TTexture2D; cdecl; external cDllName;
@@ -1322,12 +1530,11 @@ function  GetShapesTexture(): TTexture2D; cdecl; external cDllName;
 function  GetShapesTextureRec(): TRectangle; cdecl; external cDllName;
 procedure SetShapesTexture(aTexture : TTexture2D; aSource : TRectangle); cdecl; external cDllName;
 
-// TShader configuration functions
-function  GetShaderLocation(aShader: TShader; aUniformName: PAnsiChar): Integer; cdecl; external cDllName;
-procedure SetShaderValue(aShader: TShader; aUniformLoc: Integer; aValue: Pointer; aUniformType: Integer); cdecl; external cDllName;
-procedure SetShaderValueV(aShader: TShader; aUniformLoc: Integer; aValue: Pointer; aUniformType, aCount: Integer); cdecl; external cDllName;
-procedure SetShaderValueMatrix(TShader: TShader; aUniformLoc: Integer; mat: TMatrix); cdecl; external cDllName;
-procedure SetShaderValueTexture(aShader : TShader; aUniformLoc : Integer; aTexture : TTexture2D); cdecl; external cDllName;
+
+
+
+
+
 procedure SetMatrixProjection(aProj: TMatrix); cdecl; external cDllName;
 procedure SetMatrixModelview(aView: TMatrix); cdecl; external cDllName;
 function  GetMatrixModelview(): TMatrix; cdecl; external cDllName;
@@ -1340,11 +1547,12 @@ function  GenTextureIrradiance(aShader: TShader; aCubemap: TTexture2D; aSize: In
 function  GenTexturePrefilter(aShader: TShader; aCubemap: TTexture2D; aSize: Integer): TTexture2D; cdecl; external cDllName;
 function  GenTextureBRDF(aShader: TShader; aCubemap: TTexture2D; aSize: Integer): TTexture2D; cdecl; external cDllName;
 
+// Moved to drawing functions
 // Shading begin/end functions
-procedure BeginShaderMode(aShader : TShader); cdecl; external cDllName;                                // Begin custom shader drawing
-procedure EndShaderMode();  cdecl; external cDllName;                                         // End custom shader drawing (use default shader)
-procedure BeginBlendMode(aMode : Integer); cdecl; external cDllName;                                      // Begin blending mode (alpha, additive, multiplied)
-procedure EndBlendMode();cdecl; external cDllName;                                            // End blending mode (reset to default: alpha blending)
+//procedure BeginShaderMode(aShader : TShader); cdecl; external cDllName;                                // Begin custom shader drawing
+//procedure EndShaderMode();  cdecl; external cDllName;                                         // End custom shader drawing (use default shader)
+//procedure BeginBlendMode(aMode : Integer); cdecl; external cDllName;                                      // Begin blending mode (alpha, additive, multiplied)
+//procedure EndBlendMode();cdecl; external cDllName;                                            // End blending mode (reset to default: alpha blending)
 
 // VR control functions
 procedure InitVrSimulator(); cdecl; external cDllName;
@@ -1502,7 +1710,7 @@ begin
   Result.target := aTarget;
   Result.up := aUp;
   Result.fovy := aFOVY;
-  Result.&type := aType;
+  Result.projection := aType;
 end;
 
 procedure TCamera3DSet(aCam : PCamera3D; aPosition, aTarget, aUp: TVector3; aFOVY: Single; aType: Integer);
@@ -1511,7 +1719,7 @@ begin
   aCam^.target := aTarget;
   aCam^.up := aUp;
   aCam^.fovy := aFOVY;
-  aCam^.&type := aType;
+  aCam^.projection := aType;
 end;
 
 

@@ -1,28 +1,28 @@
-IF EXIST "%1" (
-  fpc -Fl./libs -Fu./libs -FE./bin -FU./tmp -g -O1 %1
-) ELSE (
-  SET debug=
-  SET static=false
-  
-  FOR %%a in (%*) DO (
-    SET cmd=--debug
-    CALL SET arg=%%a:%cmd%=%%
-    IF NOT "x%%arg%%"=="x%%a%%" (
-      SET debug=-g -O1
-    )
-    SET cmd=--static
-    CALL SET arg=%%a:%cmd%=%%
-    IF NOT "x%%arg%%"=="x%%a%%" (
-      SET static=true
-    )
-  )
+"C:\FPC\3.2.0\bin\i386-win32\fpc.exe" -Fl./libs -Fu./libs -FE./bin -FU./tmp -g -O1 %1
 
-  FOR /R ./examples %%F IN (*.pas) DO (
-    IF "%static%"=="true" (
-      REM fpc -Fl./libs -Fu./libs -FE./bin -FU./tmp %debug% %%F
-    )
-    IF "%static%"=="false" (
-      fpc -Fl./libs -Fu./libs -FE./bin -FU./tmp %debug% %%F
-    )
-  )
-)
+@REM ) ELSE (
+@REM  SET debug=
+@REM  SET static=false
+@REM  
+@REM  FOR %%a in (%*) DO (
+@REM    SET cmd=--debug
+@REM    CALL SET arg=%%a:%cmd%=%%
+@REM    IF NOT "x%%arg%%"=="x%%a%%" (
+@REM      SET debug=-g -O1
+@REM    )
+@REM    SET cmd=--static
+@REM    CALL SET arg=%%a:%cmd%=%%
+@REM   IF NOT "x%%arg%%"=="x%%a%%" (
+@REM     SET static=true
+@REM   )
+@REM )
+
+@REM   FOR /R ./examples %%F IN (*.pas) DO (
+@REM     IF "%static%"=="true" (
+@REM       REM fpc -Fl./libs -Fu./libs -FE./bin -FU./tmp %debug% %%F
+@REM     )
+@REM     IF "%static%"=="false" (
+@REM       fpc -Fl./libs -Fu./libs -FE./bin -FU./tmp %debug% %%F
+@REM     )
+@REM   )
+@REM )
